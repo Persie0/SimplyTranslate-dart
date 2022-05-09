@@ -54,7 +54,7 @@ void main() async {
   print(Gtranslation.translations.translations);
   //{adjective: {dick: {frequency: 1/3, words: [thick, fat, large, big, heavy, stout]}, faustdick: {frequency: 1/3,...
 
-  //get multiple word defenitions in native language from Google
+  //get multiple word definitions in native language from Google
   //returns Map<String, dynamic>
   print(Gtranslation.translations.definition);
   //{adjective: [{definition: of considerable size, extent, or intensity., synonyms: {: [large, sizeable,...
@@ -73,10 +73,10 @@ https://github.com/gabrielpacheco23/google-translator
 which was used as a template for this package.
 
 
-
-Sadly Google only allows a limited amount of requests therefore I chose
+As Google only allows a limited amount of requests an alternative was needed.
+I chose
 https://sr.ht/~metalune/SimplyTranslate/
-as an alternative. But you still get Google Translation quality.
+Free and open source but you still get Google Translation quality.
 
 
 
