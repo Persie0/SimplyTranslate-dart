@@ -7,7 +7,7 @@ void main() async {
   final LibreTranslator = SimplyTranslator(EngineType.libre);
 
   //get "hello" as an Audio-Url
-  //uses always Google TTS as Libretranslate doesnt support that, gives same result
+  //uses always Google TTS as Libretranslate doesnt support TTS, gives same result
   print(GoogleTranslator.getTTSUrl("hello", "en"));
   print(LibreTranslator.getTTSUrl("hello", "en"));
   //https://simplytranslate.org/api/tts/?engine=google&lang=en&text=hello
