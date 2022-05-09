@@ -1,0 +1,13 @@
+name: simplytranslate
+version: 0.0.1
+description: Free and unlimited Google and Libretranslate translations. Fast and private. Working with the SimplyTranslate API.
+#author: Marvin Persie
+homepage: https://github.com/Persie0/SimplyTranslate-dart
+dependencies:
+  http: ^0.13.4
+
+dev_dependencies:
+  test: any
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
