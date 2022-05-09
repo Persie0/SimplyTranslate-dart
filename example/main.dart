@@ -14,35 +14,39 @@ void main() async {
 
 //using Libretranslate
   //only text translation avaliable
-  var Ltranslation = await LibreTranslator
-      .translate("The dispositions were very complicated and difficult.", from: 'en', to: 'de');
+  var Ltranslation = await LibreTranslator.translate(
+      "The dispositions were very complicated and difficult.",
+      from: 'en',
+      to: 'de');
   print(Ltranslation.translations.text);
   //Die Anordnungen waren sehr kompliziert und schwierig.
 
   //without source language (auto):
-  Ltranslation = await LibreTranslator
-      .translate("The dispositions were very complicated and difficult.", to: 'de');
+  Ltranslation = await LibreTranslator.translate(
+      "The dispositions were very complicated and difficult.",
+      to: 'de');
   print(Ltranslation.translations.text);
   //Die Anordnungen waren sehr kompliziert und schwierig.
 
 //using Googletranslate:
-  var Gtranslation = await GoogleTranslator
-      .translate("The dispositions were very complicated and difficult.", from: 'en', to: 'de');
+  var Gtranslation = await GoogleTranslator.translate(
+      "The dispositions were very complicated and difficult.",
+      from: 'en',
+      to: 'de');
   //get whole Text translation
   //Returns String
   print(Gtranslation.translations.text);
   //Die Dispositionen waren sehr kompliziert und schwierig.
 
   //without source language (auto):
-  Gtranslation = await GoogleTranslator
-      .translate("The dispositions were very complicated and difficult.", to: 'de');
+  Gtranslation = await GoogleTranslator.translate(
+      "The dispositions were very complicated and difficult.",
+      to: 'de');
   //Die Dispositionen waren sehr kompliziert und schwierig.
-
 
   //get multiple word translations in target language from Google
   //returns Map<String, dynamic>
-  Gtranslation = await GoogleTranslator
-      .translate("big", from: 'en', to: 'de');
+  Gtranslation = await GoogleTranslator.translate("big", from: 'en', to: 'de');
   print(Gtranslation.translations.translations);
   //{adjective: {dick: {frequency: 1/3, words: [thick, fat, large, big, heavy, stout]}, faustdick: {frequency: 1/3,...
 

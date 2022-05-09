@@ -29,7 +29,6 @@ class SimplyTranslator {
       }
     }
 
-
     final parameters = {
       'engine': engine.toString().replaceAll("EngineType.", ""),
       'from': from,
@@ -41,7 +40,8 @@ class SimplyTranslator {
     final data = await http.get(url);
 
     if (data.statusCode != 200) {
-      throw http.ClientException('Error ${data.statusCode}:\n\n ${data.body}', url);
+      throw http.ClientException(
+          'Error ${data.statusCode}:\n\n ${data.body}', url);
     }
 
     final jsonData = jsonDecode(data.body);
@@ -49,13 +49,13 @@ class SimplyTranslator {
       throw http.ClientException('Error: Can\'t parse json data');
     }
     final Result trans;
-    if(engine==EngineType.google) {
+    if (engine == EngineType.google) {
       var def = Map<String, dynamic>.from(jsonData['definitions'] ?? {});
-      var translations = Map<String, dynamic>.from(jsonData['translations'] ?? {});
+      var translations =
+          Map<String, dynamic>.from(jsonData['translations'] ?? {});
       trans = Result(jsonData['translated-text'], def, translations);
-    }
-    else
-      trans = Result(jsonData['translated-text'], {}, {});
+    } else
+      trans = Result(jsonData['translated-text'], Map(), Map());
     if (from == 'auto' && from != to) {
       from = jsonData[2] ?? from;
       if (from == to) {
@@ -78,11 +78,7 @@ class SimplyTranslator {
     }
     var _baseUrl = 'simplytranslate.org';
     final _path = '/api/tts/';
-    final parameters = {
-      'engine': "google",
-      'lang': lang,
-      'text': sourceText
-    };
+    final parameters = {'engine': "google", 'lang': lang, 'text': sourceText};
 
     String url = Uri.https(_baseUrl, _path, parameters).toString();
     return url;

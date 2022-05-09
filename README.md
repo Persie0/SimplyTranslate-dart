@@ -3,25 +3,10 @@ Simplytranslate API for Dart / Flutter
 
 GitHub: https://github.com/Persie0/SimplyTranslate-dart
 
-# Credits
-Credits go to:
-https://github.com/gabrielpacheco23/google-translator
-which I used in my Dart project but also as a template for this package.
-
-
-
-Sadly Google only allows a limited amount of requests therefore I chose
-https://sr.ht/~metalune/SimplyTranslate/
-as an alternative. But you still get Google Translation quality.
-
-
-
-Also considered and a great project (but no Libretranslate):
-https://github.com/TheDavidDelta/lingva-translate
 # Usage 
 
 ```dart
-import 'package:simplytranslate/translator.dart';
+import 'package:simplytranslate/simplytranslate.dart';
 
 void main() async {
   //use Google Translate
@@ -80,6 +65,20 @@ void main() async {
 
 # Simplytranslate API docs
 Simplytranslate API docs:  https://git.sr.ht/~metalune/simplytranslate_web/tree/HEAD/api.md
+&nbsp;
+
+# Credits
+Credits go to:
+https://github.com/gabrielpacheco23/google-translator
+which I used in my Dart project but also as a template for this package.
 
 
 
+Sadly Google only allows a limited amount of requests therefore I chose
+https://sr.ht/~metalune/SimplyTranslate/
+as an alternative. But you still get Google Translation quality.
+
+
+
+Also considered and a great project (but no Libretranslate):
+https://github.com/TheDavidDelta/lingva-translate
