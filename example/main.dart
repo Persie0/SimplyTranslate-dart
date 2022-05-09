@@ -1,4 +1,4 @@
-import 'package:simplytranslate/translator.dart';
+import 'package:simplytranslate/simplytranslate.dart';
 
 void main() async {
   //use Google Translate
