@@ -78,9 +78,4 @@ void main() async {
 Simplytranslate API docs:  https://git.sr.ht/~metalune/simplytranslate_web/tree/HEAD/api.md
 
 
-# License
-MIT License
-
-Copyright © 2022 Marvin Persie
-
 
