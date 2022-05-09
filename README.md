@@ -3,7 +3,7 @@ Simplytranslate API for Dart / Flutter
 
 GitHub: https://github.com/Persie0/SimplyTranslate-dart
 
-#Credits
+# Credits
 Credits go to:
 https://github.com/gabrielpacheco23/google-translator
 which I used in my Dart project but also as a template for this package.
