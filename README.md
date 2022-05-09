@@ -10,7 +10,7 @@ which I used in my Dart project but also as a template for this package.
 
 
 
-but sadly Google only allows a limited amount of requests therefore I chose
+Sadly Google only allows a limited amount of requests therefore I chose
 https://sr.ht/~metalune/SimplyTranslate/
 as an alternative. But you still get Google Translation quality.
 
