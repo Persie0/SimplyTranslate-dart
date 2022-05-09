@@ -1,5 +1,6 @@
 part of simplytranslate;
 
+//Result includes the different translation results
 class Result {
   Result(this.text, this.definition, this.translations);
   final String text;
@@ -7,7 +8,7 @@ class Result {
   final Map<String, dynamic> translations;
 }
 
-/// Translation returned from SimplyTranslator.translate method
+// Translation returned from SimplyTranslator.translate method
 abstract class Translation {
   final Result translations;
   late final String source;

@@ -70,7 +70,7 @@ Simplytranslate API docs:  https://git.sr.ht/~metalune/simplytranslate_web/tree/
 # Credits
 Credits go to:
 https://github.com/gabrielpacheco23/google-translator
-which I used in my Dart project but also as a template for this package.
+which was used as a template for this package.
 
 
 

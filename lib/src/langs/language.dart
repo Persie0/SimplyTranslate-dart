@@ -1,4 +1,4 @@
-/// Language object with name and code (ISO)
+// Language object with name and code (ISO)
 class Language {
   final String name;
   final String code;
@@ -9,7 +9,7 @@ class Language {
   String toString() => name;
 }
 
-/// Language list containing all languages supported by Google Translate API
+// Language list containing all languages supported by Google Translate API
 class LanguageList {
   static final _langs = {
     'auto': 'Automatic',

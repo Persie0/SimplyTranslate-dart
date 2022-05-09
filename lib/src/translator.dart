@@ -7,11 +7,11 @@ import './langs/language.dart';
 
 part './model/translation.dart';
 
-///
-/// This library is a Dart implementation of Simplytranslate API
-///
-/// [author] Marvin Persie.
-///
+//
+// This library is a Dart implementation of Simplytranslate API
+//
+// [author] Marvin Persie.
+//
 class SimplyTranslator {
   var _baseUrl = 'simplytranslate.org'; // faster than translate.google.com
   final _path = '/api/translate/';
@@ -20,7 +20,7 @@ class SimplyTranslator {
   EngineType engine;
   SimplyTranslator(this.engine);
 
-  /// Translates texts from specified language to another
+  // Translates texts from specified language to another
   Future<Translation> translate(String sourceText,
       {String from = 'auto', String to = 'en'}) async {
     for (var each in [from, to]) {
@@ -49,13 +49,17 @@ class SimplyTranslator {
       throw http.ClientException('Error: Can\'t parse json data');
     }
     final Result trans;
+    //should use Google Translate
     if (engine == EngineType.google) {
       var def = Map<String, dynamic>.from(jsonData['definitions'] ?? {});
       var translations =
           Map<String, dynamic>.from(jsonData['translations'] ?? {});
       trans = Result(jsonData['translated-text'], def, translations);
-    } else
+    }
+    //should use Libre Translate
+    else {
       trans = Result(jsonData['translated-text'], Map(), Map());
+    }
     if (from == 'auto' && from != to) {
       from = jsonData[2] ?? from;
       if (from == to) {
