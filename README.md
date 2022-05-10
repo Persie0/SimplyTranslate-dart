@@ -2,6 +2,7 @@
 Simplytranslate API for Dart / Flutter
 
 GitHub: https://github.com/Persie0/SimplyTranslate-dart
+
 Pub: https://pub.dev/packages/simplytranslate
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/marvinperzi#)
