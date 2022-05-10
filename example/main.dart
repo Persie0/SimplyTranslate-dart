@@ -1,10 +1,13 @@
 import 'package:simplytranslate/simplytranslate.dart';
 
 void main() async {
-  //use Google Translate
+  ///use Google Translate
   final GoogleTranslator = SimplyTranslator(EngineType.google);
   ///use Libretranslate
   final LibreTranslator = SimplyTranslator(EngineType.libre);
+
+///if you do not specify the source language it us automatically selecting it depending on the text
+///if you do not specify the target language it us automatically English
 
   ///get "hello" as an Audio-Url
   ///uses always Google TTS as Libretranslate doesnt support TTS, gives same result
@@ -15,17 +18,17 @@ void main() async {
 ///using Libretranslate
   ///only text translation avaliable
   ///short form to only get translated text as String, also shorter code:
-  String textResult = await LibreTranslator.tr("Er läuft schnell.","en",'de');
+  String textResult = await LibreTranslator.tr("Er läuft schnell.","de",'en');
   ///is the same as
   textResult = await LibreTranslator.tr("Er läuft schnell.");
+  print(textResult);
+  //he's running fast.
 
   ///long form
   var Ltranslation = await LibreTranslator.translate(
       "The dispositions were very complicated and difficult.",
       from: 'en',
       to: 'de');
-  print(textResult);
-  //he's running fast.
   print(Ltranslation.translations.text);
   //Die Anordnungen waren sehr kompliziert und schwierig.
 
