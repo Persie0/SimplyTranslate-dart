@@ -7,8 +7,7 @@ Pub: https://pub.dev/packages/simplytranslate
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/marvinperzi#)
 
-<a href=""><img src="https://github.com/andreostrovsky/donate-with-paypal/raw/master/blue.svg" height="72"></a>
-
+<a href="https://paypal.me/marvinperzi?country.x=AT&locale.x=de_DE"><img src="https://github.com/andreostrovsky/donate-with-paypal/raw/master/blue.svg" height="50"></a>
 
 # Usage 
 
