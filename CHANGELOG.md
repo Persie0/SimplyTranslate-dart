@@ -1,5 +1,8 @@
 # Releases
 
+# 1.0.5.1
+- optics
+
 # 1.0.5
 - shorter Method added
 
