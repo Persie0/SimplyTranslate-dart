@@ -1,7 +1,7 @@
 # Releases
 
 # 1.0.5
-- shorter Method addded
+- shorter Method added
 
 # 1.0.4
 - Fixed Readme error
