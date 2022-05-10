@@ -7,6 +7,9 @@ Pub: https://pub.dev/packages/simplytranslate
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/marvinperzi#)
 
+<a href=""><img src="https://github.com/andreostrovsky/donate-with-paypal/raw/master/blue.svg" height="72"></a>
+
+
 # Usage 
 
 ```dart
