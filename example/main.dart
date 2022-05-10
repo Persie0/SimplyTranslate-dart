@@ -14,10 +14,18 @@ void main() async {
 
 //using Libretranslate
   //only text translation avaliable
+  //short form to only get translated text as String, also shorter code:
+  String textResult = await LibreTranslator.tr("Er läuft schnell.","en",'de');
+  //is the same as
+  textResult = await LibreTranslator.tr("Er läuft schnell.");
+  //he's running fast.
+
+  //long form
   var Ltranslation = await LibreTranslator.translate(
       "The dispositions were very complicated and difficult.",
       from: 'en',
       to: 'de');
+  print(textResult);
   print(Ltranslation.translations.text);
   //Die Anordnungen waren sehr kompliziert und schwierig.
 
@@ -29,6 +37,14 @@ void main() async {
   //Die Anordnungen waren sehr kompliziert und schwierig.
 
 //using Googletranslate:
+  //short form to only get translated text as String, also shorter code:
+  textResult = await GoogleTranslator.tr("Er läuft schnell.","en",'de');
+  //is the same as
+  textResult = await GoogleTranslator.tr("Er läuft schnell.");
+  print(textResult);
+  //He walks fast.
+
+  //long form to also get definitions and single word translations
   var Gtranslation = await GoogleTranslator.translate(
       "The dispositions were very complicated and difficult.",
       from: 'en',
@@ -50,7 +66,7 @@ void main() async {
   print(Gtranslation.translations.translations);
   //{adjective: {dick: {frequency: 1/3, words: [thick, fat, large, big, heavy, stout]}, faustdick: {frequency: 1/3,...
 
-  //get multiple word defenitions in native language from Google
+  //get multiple word definitions in native language from Google
   //returns Map<String, dynamic>
   print(Gtranslation.translations.definition);
   //{adjective: [{definition: of considerable size, extent, or intensity., synonyms: {: [large, sizeable,...

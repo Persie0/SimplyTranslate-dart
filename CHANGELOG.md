@@ -1,5 +1,8 @@
 # Releases
 
+# 1.0.5
+- shorter Method addded
+
 # 1.0.4
 - Fixed Readme error
 - Code formatted
