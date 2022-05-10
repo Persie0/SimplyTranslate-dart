@@ -96,10 +96,10 @@ https://github.com/gabrielpacheco23/google-translator
 which was used as a template for this package.
 
 
-
-Sadly Google only allows a limited amount of requests therefore I chose
+As Google only allows a limited amount of requests an alternative was needed.
+I chose
 https://sr.ht/~metalune/SimplyTranslate/
-as an alternative. But you still get Google Translation quality.
+Free and open source but you still get Google Translation quality.
 
 
 
