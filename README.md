@@ -92,6 +92,9 @@ void main() async {
 ```
 &nbsp;
 
+# TODO:
+-) improve definitions - return definitions not as Map
+
 # Simplytranslate API docs
 Simplytranslate API docs:  https://git.sr.ht/~metalune/simplytranslate_web/tree/HEAD/api.md
 &nbsp;
@@ -109,5 +112,5 @@ Free and open source but you still get Google Translation quality.
 
 
 
-Also considered and a great project (but no Libretranslate):
+Also considered and a great project (but no Libretranslate and single word definitions):
 https://github.com/TheDavidDelta/lingva-translate

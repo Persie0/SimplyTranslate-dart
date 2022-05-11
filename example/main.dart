@@ -3,11 +3,12 @@ import 'package:simplytranslate/simplytranslate.dart';
 void main() async {
   ///use Google Translate
   final GoogleTranslator = SimplyTranslator(EngineType.google);
+
   ///use Libretranslate
   final LibreTranslator = SimplyTranslator(EngineType.libre);
 
-///if you do not specify the source language it us automatically selecting it depending on the text
-///if you do not specify the target language it us automatically English
+  ///if you do not specify the source language it us automatically selecting it depending on the text
+  ///if you do not specify the target language it us automatically English
 
   ///get "hello" as an Audio-Url
   ///uses always Google TTS as Libretranslate doesnt support TTS, gives same result
@@ -15,10 +16,11 @@ void main() async {
   print(LibreTranslator.getTTSUrl("hello", "en"));
   //https://simplytranslate.org/api/tts/?engine=google&lang=en&text=hello
 
-///using Libretranslate
+  ///using Libretranslate
   ///only text translation avaliable
   ///short form to only get translated text as String, also shorter code:
-  String textResult = await LibreTranslator.tr("Er läuft schnell.","de",'en');
+  String textResult = await LibreTranslator.tr("Er läuft schnell.", "de", 'en');
+
   ///is the same as
   textResult = await LibreTranslator.tr("Er läuft schnell.");
   print(textResult);
@@ -39,9 +41,10 @@ void main() async {
   print(Ltranslation.translations.text);
   //Die Anordnungen waren sehr kompliziert und schwierig.
 
-///using Googletranslate:
+  ///using Googletranslate:
   ///short form to only get translated text as String, also shorter code:
-  textResult = await GoogleTranslator.tr("Er läuft schnell.","en",'de');
+  textResult = await GoogleTranslator.tr("Er läuft schnell.", "en", 'de');
+
   ///is the same as
   textResult = await GoogleTranslator.tr("Er läuft schnell.");
   print(textResult);
@@ -52,6 +55,7 @@ void main() async {
       "The dispositions were very complicated and difficult.",
       from: 'en',
       to: 'de');
+
   ///get whole Text translation
   ///Returns String
   print(Gtranslation.translations.text);
