@@ -6,10 +6,11 @@ void main() async {
 
   ///use Libretranslate
   final LibreTranslator = SimplyTranslator(EngineType.libre);
+/*
 
-  //change instance (defaut is simplytranslate.org)
-  // find other instances under https://simple-web.org/projects/simplytranslate.html
-  GoogleTranslator.baseUrl="simplytranslate.pussthecat.org";
+  ///change instance (defaut is simplytranslate.org)
+  /// find other instances under https://simple-web.org/projects/simplytranslate.html
+  GoogleTranslator.baseUrl = "simplytranslate.pussthecat.org";
 
   ///if you do not specify the source language it is automatically selecting it depending on the text
   ///if you do not specify the target language it is automatically English
@@ -53,6 +54,7 @@ void main() async {
   textResult = await GoogleTranslator.tr("Er läuft schnell.");
   print(textResult);
   //He walks fast.
+*/
 
   ///long form to also get definitions and single word translations
   var Gtranslation = await GoogleTranslator.translate(
@@ -73,12 +75,13 @@ void main() async {
 
   ///get multiple word translations in target language from Google
   ///returns Map<String, dynamic>
-  Gtranslation = await GoogleTranslator.translate("big", from: 'en', to: 'de');
-  print(Gtranslation.translations.translations);
+  Gtranslation = await GoogleTranslator.translate("very", from: 'en', to: 'de');
+  print(Gtranslation.translations.raw_translations);
   //{adjective: {dick: {frequency: 1/3, words: [thick, fat, large, big, heavy, stout]}, faustdick: {frequency: 1/3,...
 
+  print("\n");
   ///get multiple word definitions in native language from Google
   ///returns Map<String, dynamic>
-  print(Gtranslation.translations.definition);
+  print(Gtranslation.translations.raw_definitions);
   //{adjective: [{definition: of considerable size, extent, or intensity., synonyms: {: [large, sizeable,...
 }

@@ -106,7 +106,9 @@ void main() async {
 
 # Credits and copyright
 Gabriel Pacheco
+
 https://github.com/gabrielpacheco23/google-translator
+
 distributed under the
 ```
 MIT License
