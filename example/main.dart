@@ -7,8 +7,12 @@ void main() async {
   ///use Libretranslate
   final LibreTranslator = SimplyTranslator(EngineType.libre);
 
-  ///if you do not specify the source language it us automatically selecting it depending on the text
-  ///if you do not specify the target language it us automatically English
+  //change instance (defaut is simplytranslate.org)
+  // find other instances under https://simple-web.org/projects/simplytranslate.html
+  GoogleTranslator.baseUrl="simplytranslate.pussthecat.org";
+
+  ///if you do not specify the source language it is automatically selecting it depending on the text
+  ///if you do not specify the target language it is automatically English
 
   ///get "hello" as an Audio-Url
   ///uses always Google TTS as Libretranslate doesnt support TTS, gives same result

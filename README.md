@@ -7,7 +7,7 @@ Pub: https://pub.dev/packages/simplytranslate
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/marvinperzi#)
 
-<a href="https://paypal.me/marvinperzi?country.x=AT&locale.x=de_DE"><img src="https://github.com/andreostrovsky/donate-with-paypal/raw/master/blue.svg" height="50"></a>
+<a href="https://paypal.me/marvinperzi?country.x=AT&locale.x=de_DE"><img src="https://github.com/andreostrovsky/donate-with-paypal/raw/master/blue.svg" height="40"></a>
 
 # Usage 
 
@@ -17,11 +17,16 @@ import 'package:simplytranslate/simplytranslate.dart';
 void main() async {
   ///use Google Translate
   final GoogleTranslator = SimplyTranslator(EngineType.google);
+
   ///use Libretranslate
   final LibreTranslator = SimplyTranslator(EngineType.libre);
 
-  ///if you do not specify the source language it us automatically selecting it depending on the text
-  ///if you do not specify the target language it us automatically English
+  //change instance (defaut is simplytranslate.org)
+  // find other instances under https://simple-web.org/projects/simplytranslate.html
+  GoogleTranslator.baseUrl="simplytranslate.pussthecat.org";
+
+  ///if you do not specify the source language it is automatically selecting it depending on the text
+  ///if you do not specify the target language it is automatically English
 
   ///get "hello" as an Audio-Url
   ///uses always Google TTS as Libretranslate doesnt support TTS, gives same result
@@ -32,7 +37,8 @@ void main() async {
   ///using Libretranslate
   ///only text translation avaliable
   ///short form to only get translated text as String, also shorter code:
-  String textResult = await LibreTranslator.tr("Er läuft schnell.","de",'en');
+  String textResult = await LibreTranslator.tr("Er läuft schnell.", "de", 'en');
+
   ///is the same as
   textResult = await LibreTranslator.tr("Er läuft schnell.");
   print(textResult);
@@ -55,7 +61,8 @@ void main() async {
 
   ///using Googletranslate:
   ///short form to only get translated text as String, also shorter code:
-  textResult = await GoogleTranslator.tr("Er läuft schnell.","en",'de');
+  textResult = await GoogleTranslator.tr("Er läuft schnell.", "en", 'de');
+
   ///is the same as
   textResult = await GoogleTranslator.tr("Er läuft schnell.");
   print(textResult);
@@ -66,6 +73,7 @@ void main() async {
       "The dispositions were very complicated and difficult.",
       from: 'en',
       to: 'de');
+
   ///get whole Text translation
   ///Returns String
   print(Gtranslation.translations.text);
@@ -93,24 +101,29 @@ void main() async {
 &nbsp;
 
 # TODO:
--) improve definitions - return definitions not as Map
+- improve definitions - return definitions not as Map
 
-# Simplytranslate API docs
-Simplytranslate API docs:  https://git.sr.ht/~metalune/simplytranslate_web/tree/HEAD/api.md
-&nbsp;
 
-# Credits
-Credits go to:
+# Credits and copyright
+Gabriel Pacheco
 https://github.com/gabrielpacheco23/google-translator
+distributed under the
+```
+MIT License
+Copyright (c) 2021 Gabriel Pacheco
+```
 which was used as a template for this package.
 
 
 As Google only allows a limited amount of requests an alternative was needed.
-I chose
-https://sr.ht/~metalune/SimplyTranslate/
-Free and open source but you still get Google Translation quality.
+https://simplytranslate.org/
+is free and open source and you still get Google Translation quality.
 
 
 
-Also considered and a great project (but no Libretranslate and single word definitions):
+Also a great project (but no Libretranslate and single word definitions available):
 https://github.com/TheDavidDelta/lingva-translate
+
+# Simplytranslate API docs
+Simplytranslate API docs:  https://git.sr.ht/~metalune/simplytranslate_web/tree/HEAD/api.md
+&nbsp;

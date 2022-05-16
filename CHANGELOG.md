@@ -1,5 +1,9 @@
 # Releases
 
+# 1.0.8
+- using post method now to support the translation of longer texts
+- added example for changing instance 
+
 # 1.0.7
 - optics
 

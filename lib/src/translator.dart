@@ -37,9 +37,8 @@ class SimplyTranslator {
       'to': to,
       'text': sourceText
     };
-
     var url = Uri.https(_baseUrl, _path, parameters);
-    final data = await http.get(url);
+    final data = await http.post(url, body: parameters);
 
     if (data.statusCode != 200) {
       throw http.ClientException(
@@ -101,7 +100,7 @@ class SimplyTranslator {
   /// Sets base URL to other instances:
   ///https:///simple-web.org/projects/simplytranslate.html
   set baseUrl(String url) => _baseUrl = url;
-}
+  }
 
 enum EngineType {
   google,
