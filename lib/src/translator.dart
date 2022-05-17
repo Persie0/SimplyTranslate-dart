@@ -74,7 +74,6 @@ class SimplyTranslator {
 
     ///should use Google Translate
     if (engine == EngineType.google) {
-      var most_used = [];
       var def = Map<String, dynamic>.from(jsonData['definitions'] ?? {});
       var translations =
           Map<String, dynamic>.from(jsonData['translations'] ?? {});
