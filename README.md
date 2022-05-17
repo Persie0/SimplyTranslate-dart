@@ -21,9 +21,17 @@ void main() async {
   ///use Libretranslate
   final LibreTranslator = SimplyTranslator(EngineType.libre);
 
-  //change instance (defaut is simplytranslate.org)
-  // find other instances under https://simple-web.org/projects/simplytranslate.html
-  GoogleTranslator.baseUrl="simplytranslate.pussthecat.org";
+  /// get the list with instances
+  print(GoogleTranslator.get_Instances);
+  //[simplytranslate.org, st.tokhmi.xyz, translate.josias.dev, ...
+
+  ///check if instance is working
+  print(await GoogleTranslator.is_instance_Working("simplytranslate.pussthecat.org"));
+  //true
+
+  /// find other instances under https://simple-web.org/projects/simplytranslate.html
+  ///change instance (defaut is simplytranslate.org)
+  GoogleTranslator.set_Instance = "simplytranslate.pussthecat.org";
 
   ///if you do not specify the source language it is automatically selecting it depending on the text
   ///if you do not specify the target language it is automatically English
@@ -52,10 +60,11 @@ void main() async {
   print(Ltranslation.translations.text);
   //Die Anordnungen waren sehr kompliziert und schwierig.
 
-  ///without source language (auto):
+  ///without source language (auto) and choosing a random instance:
   Ltranslation = await LibreTranslator.translate(
       "The dispositions were very complicated and difficult.",
-      to: 'de');
+      to: 'de',
+      instanceMode: InstanceMode.Random);
   print(Ltranslation.translations.text);
   //Die Anordnungen waren sehr kompliziert und schwierig.
 
@@ -68,11 +77,12 @@ void main() async {
   print(textResult);
   //He walks fast.
 
-  ///long form to also get definitions and single word translations
+  ///long form to also get definitions and single word translations and switching to next instance
   var Gtranslation = await GoogleTranslator.translate(
       "The dispositions were very complicated and difficult.",
       from: 'en',
-      to: 'de');
+      to: 'de',
+      instanceMode: InstanceMode.Loop);
 
   ///get whole Text translation
   ///Returns String
@@ -87,22 +97,38 @@ void main() async {
 
   ///get multiple word translations in target language from Google
   ///returns Map<String, dynamic>
-  Gtranslation = await GoogleTranslator.translate("big", from: 'en', to: 'de');
-  print(Gtranslation.translations.translations);
+  Gtranslation = await GoogleTranslator.translate("very", from: 'en', to: 'de');
+  print(Gtranslation.translations.raw_translations);
   //{adjective: {dick: {frequency: 1/3, words: [thick, fat, large, big, heavy, stout]}, faustdick: {frequency: 1/3,...
 
   ///get multiple word definitions in native language from Google
   ///returns Map<String, dynamic>
-  print(Gtranslation.translations.definition);
+  print(Gtranslation.translations.raw_definitions);
   //{adjective: [{definition: of considerable size, extent, or intensity., synonyms: {: [large, sizeable,...
+
+  //get single word translations sorted by frequency
+  print(Gtranslation.translations.frequency_translations);
+  //[sehr, stark, bloß, genau, äußerste]
+
+  ///get Lists with Translations and Definitions
+  print(Gtranslation.translations.translations);
+  print(Gtranslation.translations.definitions);
+
+  ///changing instance each time
+  for(int i=0; i<GoogleTranslator.get_Instances.length; i++) {
+    Gtranslation = await GoogleTranslator.translate(
+        "Gewechselt",
+        from: "de", instanceMode: InstanceMode.Random);
+    print(GoogleTranslator.get_current_Instance);
+    //translate.josias.dev
+    // translate.namazso.eu
+    // translate.riverside.rocks,...
+  }
 }
+
 
 ```
 &nbsp;
-
-# TODO:
-- improve definitions - return definitions not as Map
-
 
 # Credits and copyright
 Gabriel Pacheco

@@ -1,5 +1,10 @@
 # Releases
 
+# 1.1.0
+- added classes for Definitions and Translations to simplify the response
+- added different instances and functions for instances
+- By default looping now through instances to lower server load
+
 # 1.0.8
 - using post method now to support the translation of longer texts
 - added example for changing instance 
