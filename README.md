@@ -102,6 +102,7 @@ void main() async {
 
 # TODO:
 - improve definitions - return definitions not as Map
+- add instance list and option to use a random instance or always another instance
 
 
 # Credits and copyright
