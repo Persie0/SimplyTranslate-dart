@@ -130,6 +130,10 @@ void main() async {
 ```
 &nbsp;
 
+# TODO
+- Make default instance random
+- add retry or similar when the server returns an error
+
 # Credits and copyright
 Gabriel Pacheco
 
