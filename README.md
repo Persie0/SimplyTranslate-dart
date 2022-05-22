@@ -133,6 +133,7 @@ void main() async {
 # TODO
 - Make default instance random
 - add retry or similar when the server returns an error
+- fetch instance list from the API
 
 # Credits and copyright
 Gabriel Pacheco
