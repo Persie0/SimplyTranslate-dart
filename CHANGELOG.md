@@ -3,6 +3,7 @@
 - default instance is now random
 - retry option added - when the server returns an error
 - instance list can now be fetched from the website
+- Instance "tl.vern.cc" got blacklisted as it is the only instance that throws an error when used (excessively).
 
 # 1.1.0
 - added classes for Definitions and Translations to simplify the response
