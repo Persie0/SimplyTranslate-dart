@@ -87,8 +87,8 @@ class SimplyTranslator {
       var def = Map<String, dynamic>.from(jsonData['definitions'] ?? {});
       var translations =
           Map<String, dynamic>.from(jsonData['translations'] ?? {});
-      List<Translations> transl_list = [];
-      List<Definitions> def_list = [];
+      List<Translations> translList = [];
+      List<Definitions> defList = [];
       List<String> one = [];
       List<String> two = [];
       List<String> three = [];
@@ -98,7 +98,7 @@ class SimplyTranslator {
           var words = translations[type][word]["words"] ?? [];
           words = words.cast<String>();
           var frequency = translations[type][word]["frequency"] ?? "";
-          transl_list.add(Translations(type, word, frequency, words));
+          translList.add(Translations(type, word, frequency, words));
           if (frequency == "3/3") {
             three.add(word);
           } else if (frequency == "2/3") {
@@ -108,39 +108,39 @@ class SimplyTranslator {
           }
         }
       }
-      List<String> frequency_translations = three + two + one;
+      List<String> frequencyTranslations = three + two + one;
       for (var type in def.keys) {
         for (int i = 0; i < def[type].length; i++) {
           List<String> synonyms = [];
-          List<String> informal_synonyms = [];
-          List<String> archaic_synonyms = [];
+          List<String> informalSynonyms = [];
+          List<String> archaicSynonyms = [];
           String definition = "";
-          String use_in_sentence = "";
+          String useInSentence = "";
           String dictionary = "";
-          var raw_syn = def[type][i]["synonyms"] ?? {};
+          var rawSyn = def[type][i]["synonyms"] ?? {};
           definition = def[type][i]["definition"] ?? "";
-          use_in_sentence = def[type][i]["use-in-sentence"] ?? "";
+          useInSentence = def[type][i]["use-in-sentence"] ?? "";
           dictionary = def[type][i]["dictionary"] ?? "";
-          use_in_sentence = def[type][i]["use-in-sentence"] ?? "";
-          if (raw_syn.isNotEmpty) {
+          useInSentence = def[type][i]["use-in-sentence"] ?? "";
+          if (rawSyn.isNotEmpty) {
             synonyms = (def[type][i]["synonyms"][""] ?? []).cast<String>();
-            informal_synonyms =
+            informalSynonyms =
                 (def[type][i]["synonyms"]["informal"] ?? []).cast<String>();
-            archaic_synonyms =
+            archaicSynonyms =
                 (def[type][i]["synonyms"]["archaic"] ?? []).cast<String>();
           }
-          def_list.add(Definitions(
+          defList.add(Definitions(
               type,
               definition,
               synonyms,
-              informal_synonyms,
-              use_in_sentence,
-              archaic_synonyms,
+              informalSynonyms,
+              useInSentence,
+              archaicSynonyms,
               dictionary));
         }
       }
       trans = Result(jsonData['translated-text'], def, translations,
-          transl_list, def_list, frequency_translations, types);
+          translList, defList, frequencyTranslations, types);
     }
 
     ///should use Libre Translate
