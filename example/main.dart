@@ -15,8 +15,7 @@ void main() async {
   gt.updateInstances();
 
   ///check if instance is working
-  print(await gt.isInstanceWorking(
-      "simplytranslate.pussthecat.org"));
+  print(await gt.isInstanceWorking("simplytranslate.pussthecat.org"));
   //true
 
   /// find other instances under https://simple-web.org/projects/simplytranslate.html
