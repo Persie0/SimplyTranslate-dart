@@ -4,18 +4,18 @@ part of simplytranslate;
 class Result {
   const Result(
       this.text,
-      this.raw_definitions,
-      this.raw_translations,
+      this.rawDefinitions,
+      this.rawTranslations,
       this.translations,
       this.definitions,
-      this.frequency_translations,
+      this.frequencyTranslations,
       this.types);
   final String text;
-  final Map<String, dynamic> raw_definitions;
-  final Map<String, dynamic> raw_translations;
+  final Map<String, dynamic> rawDefinitions;
+  final Map<String, dynamic> rawTranslations;
   final List<Translations> translations;
   final List<Definitions> definitions;
-  final List<String> frequency_translations;
+  final List<String> frequencyTranslations;
   final List<String> types;
 }
 
@@ -30,14 +30,14 @@ class Translations {
 
 /// raw_definitions as a class
 class Definitions {
-  Definitions(this.type, this.definition, this.synonyms, this.informal_synonyms,
-      this.use_in_sentence, this.archaic, this.dictionary);
+  Definitions(this.type, this.definition, this.synonyms, this.informalSynonyms,
+      this.useInSentence, this.archaic, this.dictionary);
   final String type;
   final String definition;
   final List<String> synonyms;
-  final List<String> informal_synonyms;
+  final List<String> informalSynonyms;
   final List<String> archaic;
-  final String use_in_sentence;
+  final String useInSentence;
   final String dictionary;
 }
 

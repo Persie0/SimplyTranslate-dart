@@ -49,17 +49,17 @@ class SimplyTranslator {
 
       ///Loops through the instance list
     } else if (instanceMode == InstanceMode.Loop) {
-      next_instance();
+      nextInstance();
     }
-    var url;
+    Uri url;
     dynamic jsonData;
-    var exeption;
+    http.ClientException exeption = http.ClientException("");
     for (int ret = 0; ret <= retries; ret++) {
       url = Uri.https(_baseUrl, _path, parameters);
       final data = await http.post(url, body: parameters);
 
       if (data.statusCode != 200) {
-        next_instance();
+        nextInstance();
         exeption = http.ClientException(
             'Error ${data.statusCode}:\n\n ${data.body}', url);
         continue;
@@ -67,7 +67,7 @@ class SimplyTranslator {
 
       jsonData = jsonDecode(data.body);
       if (jsonData == null) {
-        next_instance();
+        nextInstance();
         exeption = http.ClientException('Error: Can\'t parse json data');
         continue;
       }
@@ -156,7 +156,7 @@ class SimplyTranslator {
     );
   }
 
-  void next_instance() {
+  void nextInstance() {
     var index = instances.indexOf(_baseUrl);
     if (index == instances.length - 1) {
       index = 0;
@@ -187,17 +187,17 @@ class SimplyTranslator {
 
   /// Sets base URL to other instances:
   ///https:///simple-web.org/projects/simplytranslate.html
-  set set_Instance(String url) => _baseUrl = url;
+  set setInstance(String url) => _baseUrl = url;
 
   ///get the instances
-  get get_Instances => instances;
+  get getInstances => instances;
 
   ///get the currently used instance
-  get get_current_Instance => _baseUrl;
+  get getCurrentInstance => _baseUrl;
 
   ///check if the passed instance is working
-  Future<bool> is_instance_Working(String urlValue) async {
-    var url;
+  Future<bool> isInstanceWorking(String urlValue) async {
+    Uri url;
     try {
       url = Uri.parse("https://$urlValue");
     } catch (err) {
@@ -219,7 +219,7 @@ class SimplyTranslator {
   }
 
   ///update the instances with the API
-  Future<bool> update_Instances(
+  Future<bool> updateInstances(
       {List<String> blacklist = const ["tl.vern.cc"]}) async {
     try {
       final response = await http
@@ -229,9 +229,9 @@ class SimplyTranslator {
           .trim()
           .split('\n')
           .forEach((element) => newInstances.add(element));
-      blacklist.forEach((element) {
+      for (var element in blacklist) {
         newInstances.remove(element);
-      });
+      }
       instances = newInstances;
       return true;
     } catch (error) {
