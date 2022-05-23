@@ -42,11 +42,13 @@ void main() async {
   print(textResult);
   //he's running fast.
 
-  ///long form
+  ///long form, switching to next instance, 4 retries if it fails (default 1)
   var libTransl = await lt.translate(
       "The dispositions were very complicated and difficult.",
       from: 'en',
-      to: 'de');
+      to: 'de',
+      instanceMode: InstanceMode.Loop,
+      retries: 4);
   print(libTransl.translations.text);
   //Die Anordnungen waren sehr kompliziert und schwierig.
 
@@ -67,12 +69,13 @@ void main() async {
   print(textResult);
   //He walks fast.
 
-  ///long form to also get definitions and single word translations and switching to next instance
+  ///long form to also get definitions and single word translations and switching to next instance, 4 retries if it fails (default 1)
   var gtransl = await gt.translate(
       "The dispositions were very complicated and difficult.",
       from: 'en',
       to: 'de',
-      instanceMode: InstanceMode.Loop);
+      instanceMode: InstanceMode.Loop,
+      retries: 4);
 
   ///get whole Text translation
   ///Returns String
