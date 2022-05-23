@@ -28,7 +28,7 @@ class SimplyTranslator {
       {String from = 'auto',
       String to = 'en',
       InstanceMode instanceMode = InstanceMode.Loop,
-      int retries=1}) async {
+      int retries = 1}) async {
     for (var each in [from, to]) {
       if (!LanguageList.contains(each)) {
         throw LanguageNotSupportedException(each);
@@ -54,13 +54,13 @@ class SimplyTranslator {
     var url;
     dynamic jsonData;
     var exeption;
-    for (int ret = 0;ret<=retries; ret++) {
+    for (int ret = 0; ret <= retries; ret++) {
       url = Uri.https(_baseUrl, _path, parameters);
       final data = await http.post(url, body: parameters);
 
       if (data.statusCode != 200) {
         next_instance();
-        exeption= http.ClientException(
+        exeption = http.ClientException(
             'Error ${data.statusCode}:\n\n ${data.body}', url);
         continue;
       }
@@ -68,18 +68,16 @@ class SimplyTranslator {
       jsonData = jsonDecode(data.body);
       if (jsonData == null) {
         next_instance();
-        exeption= http.ClientException('Error: Can\'t parse json data');
+        exeption = http.ClientException('Error: Can\'t parse json data');
         continue;
       }
-      if ((data.statusCode == 200)&&(jsonData != null))
-        {
-          break;
-        }
-      if(ret==retries){
+      if ((data.statusCode == 200) && (jsonData != null)) {
+        break;
+      }
+      if (ret == retries) {
         throw exeption;
       }
     }
-
 
     /// final Result trans;
     var trans = Result("text", {}, {}, [], [], [], []);
@@ -221,7 +219,8 @@ class SimplyTranslator {
   }
 
   ///update the instances with the API
-  Future<bool> update_Instances({List<String> blacklist=const ["tl.vern.cc"]}) async {
+  Future<bool> update_Instances(
+      {List<String> blacklist = const ["tl.vern.cc"]}) async {
     try {
       final response = await http
           .get(Uri.parse('https://simple-web.org/instances/simplytranslate'));
@@ -230,7 +229,9 @@ class SimplyTranslator {
           .trim()
           .split('\n')
           .forEach((element) => newInstances.add(element));
-      blacklist.forEach((element) {newInstances.remove(element);});
+      blacklist.forEach((element) {
+        newInstances.remove(element);
+      });
       instances = newInstances;
       return true;
     } catch (error) {
@@ -271,6 +272,7 @@ enum EngineType {
 enum Mode {
   /// TTS of word
   tts,
+
   /// text translation
   text,
 }
