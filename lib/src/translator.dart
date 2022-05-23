@@ -129,18 +129,12 @@ class SimplyTranslator {
             archaicSynonyms =
                 (def[type][i]["synonyms"]["archaic"] ?? []).cast<String>();
           }
-          defList.add(Definitions(
-              type,
-              definition,
-              synonyms,
-              informalSynonyms,
-              useInSentence,
-              archaicSynonyms,
-              dictionary));
+          defList.add(Definitions(type, definition, synonyms, informalSynonyms,
+              useInSentence, archaicSynonyms, dictionary));
         }
       }
-      trans = Result(jsonData['translated-text'], def, translations,
-          translList, defList, frequencyTranslations, types);
+      trans = Result(jsonData['translated-text'], def, translations, translList,
+          defList, frequencyTranslations, types);
     }
 
     ///should use Libre Translate
