@@ -130,10 +130,9 @@ void main() async {
 ```
 &nbsp;
 
-# TODO
-- Make default instance random
-- add retry or similar when the server returns an error
-- fetch instance list from the API
+# Info
+- You can use https://pub.dev/packages/audioplayers for playing the TTS.
+- Instance "tl.vern.cc" got blacklisted as it is the only instance that throws an error when used (excessively).
 
 # Credits and copyright
 Gabriel Pacheco

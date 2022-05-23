@@ -1,4 +1,13 @@
 # Releases
+# 1.1.1
+- default instance is now random
+- retry option added - when the server returns an error
+- instance list can now be fetched from the website
+
+# 1.1.0
+- added classes for Definitions and Translations to simplify the response
+- added different instances and functions for instances
+- By default looping now through instances to lower server load
 
 # 1.1.0
 - added classes for Definitions and Translations to simplify the response

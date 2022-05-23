@@ -19,7 +19,7 @@ class Result {
   final List<String> types;
 }
 
-///Result includes the different translation results
+/// raw_translations as a class
 class Translations {
   Translations(this.type, this.word, this.frequency, this.meaning);
   final String type;
@@ -28,6 +28,7 @@ class Translations {
   final List<String> meaning;
 }
 
+/// raw_definitions as a class
 class Definitions {
   Definitions(this.type, this.definition, this.synonyms, this.informal_synonyms,
       this.use_in_sentence, this.archaic, this.dictionary);

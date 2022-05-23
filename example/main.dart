@@ -11,6 +11,9 @@ void main() async {
   print(GoogleTranslator.get_Instances);
   //[simplytranslate.org, st.tokhmi.xyz, translate.josias.dev, ...
 
+  ///update instances with the API
+  GoogleTranslator.update_Instances();
+
   ///check if instance is working
   print(await GoogleTranslator.is_instance_Working(
       "simplytranslate.pussthecat.org"));
@@ -25,6 +28,7 @@ void main() async {
 
   ///get "hello" as an Audio-Url
   ///uses always Google TTS as Libretranslate doesnt support TTS, gives same result
+  ///you can use https://pub.dev/packages/audioplayers to play it
   print(GoogleTranslator.getTTSUrl("hello", "en"));
   print(LibreTranslator.getTTSUrl("hello", "en"));
   //https://simplytranslate.org/api/tts/?engine=google&lang=en&text=hello

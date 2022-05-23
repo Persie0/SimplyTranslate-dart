@@ -14,7 +14,7 @@ part './model/translation.dart';
 /// [author] Marvin Perzi.
 ///
 class SimplyTranslator {
-  var _baseUrl = 'simplytranslate.org';
+  var _baseUrl = instances[Random().nextInt(instances.length)];
 
   /// faster than translate.google.com
   final _path = '/api/translate/';
@@ -27,7 +27,8 @@ class SimplyTranslator {
   Future<Translation> translate(String sourceText,
       {String from = 'auto',
       String to = 'en',
-      InstanceMode instanceMode = InstanceMode.Loop}) async {
+      InstanceMode instanceMode = InstanceMode.Loop,
+      int retries=1}) async {
     for (var each in [from, to]) {
       if (!LanguageList.contains(each)) {
         throw LanguageNotSupportedException(each);
@@ -48,28 +49,39 @@ class SimplyTranslator {
 
       ///Loops through the instance list
     } else if (instanceMode == InstanceMode.Loop) {
-      var index = instances.indexOf(_baseUrl);
-      if (index == instances.length - 1) {
-        index = 0;
-      } else {
-        index += 1;
+      next_instance();
+    }
+    var url;
+    dynamic jsonData;
+    var exeption;
+    for (int ret = 0;ret<=retries; ret++) {
+      url = Uri.https(_baseUrl, _path, parameters);
+      final data = await http.post(url, body: parameters);
+
+      if (data.statusCode != 200) {
+        next_instance();
+        exeption= http.ClientException(
+            'Error ${data.statusCode}:\n\n ${data.body}', url);
+        continue;
       }
-      _baseUrl = instances[index];
-    }
-    var url = Uri.https(_baseUrl, _path, parameters);
 
-    final data = await http.post(url, body: parameters);
-
-    if (data.statusCode != 200) {
-      throw http.ClientException(
-          'Error ${data.statusCode}:\n\n ${data.body}', url);
+      jsonData = jsonDecode(data.body);
+      if (jsonData == null) {
+        next_instance();
+        exeption= http.ClientException('Error: Can\'t parse json data');
+        continue;
+      }
+      if ((data.statusCode == 200)&&(jsonData != null))
+        {
+          break;
+        }
+      if(ret==retries){
+        throw exeption;
+      }
     }
 
-    final jsonData = jsonDecode(data.body);
-    if (jsonData == null) {
-      throw http.ClientException('Error: Can\'t parse json data');
-    }
-    // final Result trans;
+
+    /// final Result trans;
     var trans = Result("text", {}, {}, [], [], [], []);
 
     ///should use Google Translate
@@ -146,7 +158,17 @@ class SimplyTranslator {
     );
   }
 
-  ///get the TTSUrl of give input
+  void next_instance() {
+    var index = instances.indexOf(_baseUrl);
+    if (index == instances.length - 1) {
+      index = 0;
+    } else {
+      index += 1;
+    }
+    _baseUrl = instances[index];
+  }
+
+  ///get the TTSUrl of given input
   String getTTSUrl(String sourceText, String lang) {
     if (!LanguageList.contains(lang)) {
       throw LanguageNotSupportedException(lang);
@@ -169,10 +191,13 @@ class SimplyTranslator {
   ///https:///simple-web.org/projects/simplytranslate.html
   set set_Instance(String url) => _baseUrl = url;
 
+  ///get the instances
   get get_Instances => instances;
 
+  ///get the currently used instance
   get get_current_Instance => _baseUrl;
 
+  ///check if the passed instance is working
   Future<bool> is_instance_Working(String urlValue) async {
     var url;
     try {
@@ -194,8 +219,27 @@ class SimplyTranslator {
       return false;
     }
   }
+
+  ///update the instances with the API
+  Future<bool> update_Instances({List<String> blacklist=const ["tl.vern.cc"]}) async {
+    try {
+      final response = await http
+          .get(Uri.parse('https://simple-web.org/instances/simplytranslate'));
+      List<String> newInstances = [];
+      response.body
+          .trim()
+          .split('\n')
+          .forEach((element) => newInstances.add(element));
+      blacklist.forEach((element) {newInstances.remove(element);});
+      instances = newInstances;
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
 }
 
+///list with instances
 List<String> instances = [
   "simplytranslate.org",
   "st.tokhmi.xyz",
@@ -209,10 +253,11 @@ List<String> instances = [
   "translate.tiekoetter.com",
   "simplytranslate.esmailelbob.xyz",
   "translate.syncpundit.com",
-  "tl.vern.cc",
+  // "tl.vern.cc",
   "translate.slipfox.xyz"
 ];
 
+///Translation engines
 enum EngineType {
   google,
 
@@ -222,13 +267,13 @@ enum EngineType {
   /// libretranslate
 }
 
+///mode
 enum Mode {
-  tts,
-
   /// TTS of word
-  text,
-
+  tts,
   /// text translation
+  text,
 }
 
+///behaviour of what Instance should be used with the next translation
 enum InstanceMode { Random, Loop, Same }
