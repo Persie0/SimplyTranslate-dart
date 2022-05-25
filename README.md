@@ -139,7 +139,7 @@ void main() async {
 
 # Info
 - You can use https://pub.dev/packages/audioplayers for playing the TTS.
-- Instance "tl.vern.cc" got blacklisted as it is the only instance that throws an error when used (excessively).
+- Instance "tl.vern.cc" is blacklisted as it is the only instance that throws an error when used (excessively).
 
 # Credits and copyright
 Gabriel Pacheco

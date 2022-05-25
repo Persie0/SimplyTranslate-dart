@@ -90,7 +90,7 @@ void main() async {
 
   ///get multiple word translations in target language from Google
   ///returns Map<String, dynamic>
-  gtransl = await gt.translate("very", from: 'en', to: 'de');
+  gtransl = await gt.translate("exuberance", from: 'en', to: 'de');
   print(gtransl.translations.rawTranslations);
   //{adjective: {dick: {frequency: 1/3, words: [thick, fat, large, big, heavy, stout]}, faustdick: {frequency: 1/3,...
 

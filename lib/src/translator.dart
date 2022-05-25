@@ -36,7 +36,7 @@ class SimplyTranslator {
     }
 
     final parameters = {
-      'engine': engine.toString().replaceAll("EngineType.", ""),
+      'engine': engine.name,
       'from': from,
       'to': to,
       'text': sourceText
@@ -109,6 +109,7 @@ class SimplyTranslator {
         }
       }
       List<String> frequencyTranslations = three + two + one;
+      frequencyTranslations.toSet().toList();
       for (var type in def.keys) {
         for (int i = 0; i < def[type].length; i++) {
           List<String> synonyms = [];
