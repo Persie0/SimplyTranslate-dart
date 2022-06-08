@@ -26,9 +26,9 @@ class SimplyTranslator {
   /// Translates texts from specified language to another
   Future<Translation> translate(String sourceText,
       {String from = 'auto',
-        String to = 'en',
-        InstanceMode instanceMode = InstanceMode.Loop,
-        int retries = 1}) async {
+      String to = 'en',
+      InstanceMode instanceMode = InstanceMode.Loop,
+      int retries = 1}) async {
     for (var each in [from, to]) {
       if (!LanguageList.contains(each)) {
         throw LanguageNotSupportedException(each);
@@ -86,7 +86,7 @@ class SimplyTranslator {
     if (engine == EngineType.google) {
       var def = Map<String, dynamic>.from(jsonData['definitions'] ?? {});
       var translations =
-      Map<String, dynamic>.from(jsonData['translations'] ?? {});
+          Map<String, dynamic>.from(jsonData['translations'] ?? {});
       List<Translations> translList = [];
       List<Definitions> defList = [];
       List<String> one = [];
