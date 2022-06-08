@@ -1,7 +1,10 @@
 # Releases
 
+# 1.1.3
+- refactored tr() so it is faster and returns no errors which could be thrown with translate()
+
 # 1.1.2
-- frequencyTranslations now returns no double words
+- frequencyTranslations now returns no word twice
 
 # 1.1.1
 - default instance is now random

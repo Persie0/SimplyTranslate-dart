@@ -26,9 +26,9 @@ class SimplyTranslator {
   /// Translates texts from specified language to another
   Future<Translation> translate(String sourceText,
       {String from = 'auto',
-      String to = 'en',
-      InstanceMode instanceMode = InstanceMode.Loop,
-      int retries = 1}) async {
+        String to = 'en',
+        InstanceMode instanceMode = InstanceMode.Loop,
+        int retries = 1}) async {
     for (var each in [from, to]) {
       if (!LanguageList.contains(each)) {
         throw LanguageNotSupportedException(each);
@@ -86,7 +86,7 @@ class SimplyTranslator {
     if (engine == EngineType.google) {
       var def = Map<String, dynamic>.from(jsonData['definitions'] ?? {});
       var translations =
-          Map<String, dynamic>.from(jsonData['translations'] ?? {});
+      Map<String, dynamic>.from(jsonData['translations'] ?? {});
       List<Translations> translList = [];
       List<Definitions> defList = [];
       List<String> one = [];
@@ -175,9 +175,32 @@ class SimplyTranslator {
   }
 
   Future<String> tr(String sourceText, [String? from, String? to]) async {
-    return (await translate(sourceText, from: from ?? "auto", to: to ?? "en"))
-        .translations
-        .text;
+    final parameters = {
+      'engine': engine.name,
+      'from': from,
+      'to': to,
+      'text': sourceText
+    };
+
+    nextInstance();
+    Uri url;
+    dynamic jsonData;
+    url = Uri.https(_baseUrl, _path, parameters);
+    final data = await http.post(url, body: parameters);
+
+    if (data.statusCode != 200) {
+      nextInstance();
+      throw http.ClientException(
+          'Error ${data.statusCode}:\n\n ${data.body}', url);
+    }
+
+    jsonData = jsonDecode(data.body);
+    if (jsonData == null) {
+      nextInstance();
+      throw http.ClientException('Error: Can\'t parse json data');
+    }
+
+    return jsonData['translated-text'];
   }
 
   /// Sets base URL to other instances:
