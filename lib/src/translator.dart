@@ -55,7 +55,7 @@ class SimplyTranslator {
     dynamic jsonData;
     http.ClientException exeption = http.ClientException("");
     for (int ret = 0; ret <= retries; ret++) {
-      url = Uri.https(_baseUrl, _path, parameters);
+      url = Uri.https(_baseUrl, _path);
       final data = await http.post(url, body: parameters);
 
       if (data.statusCode != 200) {
@@ -177,17 +177,15 @@ class SimplyTranslator {
   Future<String> tr(String sourceText, [String? from, String? to]) async {
     final parameters = {
       'engine': engine.name,
-      'from': from,
-      'to': to,
+      'from': from??"auto",
+      'to': to??"en",
       'text': sourceText
     };
-
     nextInstance();
     Uri url;
     dynamic jsonData;
-    url = Uri.https(_baseUrl, _path, parameters);
+    url = Uri.https(_baseUrl, _path);
     final data = await http.post(url, body: parameters);
-
     if (data.statusCode != 200) {
       nextInstance();
       throw http.ClientException(
@@ -199,7 +197,6 @@ class SimplyTranslator {
       nextInstance();
       throw http.ClientException('Error: Can\'t parse json data');
     }
-
     return jsonData['translated-text'];
   }
 

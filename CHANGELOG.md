@@ -1,5 +1,8 @@
 # Releases
 
+# 1.1.4
+- fixed null error when no languages passed at tr()
+
 # 1.1.3
 - refactored tr() so it is faster and returns no errors which could be thrown with translate()
 
