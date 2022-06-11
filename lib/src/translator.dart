@@ -177,8 +177,8 @@ class SimplyTranslator {
   Future<String> tr(String sourceText, [String? from, String? to]) async {
     final parameters = {
       'engine': engine.name,
-      'from': from??"auto",
-      'to': to??"en",
+      'from': from ?? "auto",
+      'to': to ?? "en",
       'text': sourceText
     };
     nextInstance();
