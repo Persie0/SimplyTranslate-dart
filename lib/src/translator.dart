@@ -14,8 +14,10 @@ part './model/translation.dart';
 /// [author] Marvin Perzi.
 ///
 class SimplyTranslator {
-  var _baseUrlSimply = simplyInstances[Random().nextInt(simplyInstances.length)];
-  var _baseUrlLingva = lingvaInstances[Random().nextInt(lingvaInstances.length)];
+  var _baseUrlSimply =
+      simplyInstances[Random().nextInt(simplyInstances.length)];
+  var _baseUrlLingva =
+      lingvaInstances[Random().nextInt(lingvaInstances.length)];
 
   final _pathSimply = '/api/translate/';
 
@@ -46,7 +48,8 @@ class SimplyTranslator {
     ///Uses default instance or set instance
     ///Uses random instance
     if (instanceMode == InstanceMode.Random) {
-      _baseUrlSimply = simplyInstances[Random().nextInt(simplyInstances.length)];
+      _baseUrlSimply =
+          simplyInstances[Random().nextInt(simplyInstances.length)];
 
       ///Loops through the instance list
     } else if (instanceMode == InstanceMode.Loop) {
@@ -110,7 +113,7 @@ class SimplyTranslator {
         }
       }
       List<String> frequencyTranslations = three + two + one;
-      frequencyTranslations=frequencyTranslations.toSet().toList();
+      frequencyTranslations = frequencyTranslations.toSet().toList();
       for (var type in def.keys) {
         for (int i = 0; i < def[type].length; i++) {
           List<String> synonyms = [];
@@ -161,7 +164,6 @@ class SimplyTranslator {
     }
     _baseUrlSimply = simplyInstances[index];
   }
-
 
   void nextLingvaInstance() {
     var index = lingvaInstances.indexOf(_baseUrlLingva);
@@ -266,11 +268,18 @@ class SimplyTranslator {
 
   ///fast translate with Lingva
   Future<String> trLingva(String sourceText, [String? from, String? to]) async {
-    from= from ?? "auto";
-     to= to ?? "en";
+    from = from ?? "auto";
+    to = to ?? "en";
     Uri url;
     dynamic jsonData;
-    url = Uri.parse("https://"+_baseUrlLingva+"/api/v1/"+from+"/"+to+"/"+sourceText);
+    url = Uri.parse("https://" +
+        _baseUrlLingva +
+        "/api/v1/" +
+        from +
+        "/" +
+        to +
+        "/" +
+        sourceText);
     nextLingvaInstance();
     final data = await http.get(url);
     if (data.statusCode != 200) {
@@ -287,12 +296,20 @@ class SimplyTranslator {
   }
 
   ///translate with Lingva
-  Future<List<String>> translateLingva(String sourceText, [String? from, String? to]) async {
-    from= from ?? "auto";
-    to= to ?? "en";
+  Future<List<String>> translateLingva(String sourceText,
+      [String? from, String? to]) async {
+    from = from ?? "auto";
+    to = to ?? "en";
     Uri url;
     dynamic jsonData;
-    url = Uri.parse("https://"+_baseUrlLingva+"/api/v1/"+from+"/"+to+"/"+sourceText);
+    url = Uri.parse("https://" +
+        _baseUrlLingva +
+        "/api/v1/" +
+        from +
+        "/" +
+        to +
+        "/" +
+        sourceText);
     nextLingvaInstance();
     final data = await http.get(url);
     if (data.statusCode != 200) {
@@ -305,12 +322,12 @@ class SimplyTranslator {
       throw http.ClientException('Error: Can\'t parse json data');
     }
     print(_baseUrlLingva);
-    List extraTransl=jsonData['info']["extraTranslations"]??[];
+    List extraTransl = jsonData['info']["extraTranslations"] ?? [];
     List<String> one = [];
     List<String> two = [];
     List<String> three = [];
     for (int i = 0; i < extraTransl.length; i++) {
-      for(int t = 0; t < extraTransl[i]["list"].length; t++){
+      for (int t = 0; t < extraTransl[i]["list"].length; t++) {
         String word = extraTransl[i]["list"][t]["word"];
         int frequency = extraTransl[i]["list"][t]["frequency"];
         if (frequency == 3) {
@@ -326,16 +343,15 @@ class SimplyTranslator {
     return frequencyTranslations.toSet().toList();
   }
 
-  Future<String> speedTest(Function function, [String? sourceText, String? from, String? to])async {
-    sourceText=sourceText??"Hallo";
-    from= from ?? "auto";
-    to= to ?? "en";
+  Future<String> speedTest(Function function,
+      [String? sourceText, String? from, String? to]) async {
+    sourceText = sourceText ?? "Hallo";
+    from = from ?? "auto";
+    to = to ?? "en";
     Stopwatch stopwatch = new Stopwatch()..start();
     await function(sourceText, from, to);
-    return stopwatch.elapsed.inMilliseconds.toString()+"ms";
+    return stopwatch.elapsed.inMilliseconds.toString() + "ms";
   }
-
-
 }
 
 ///list with instances
@@ -371,6 +387,7 @@ enum EngineType {
 
   /// libretranslate
 }
+
 enum Site {
   lingva,
   simplytranslate,
