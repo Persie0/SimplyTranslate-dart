@@ -1,6 +1,6 @@
 name: simplytranslate
-version: 1.1.4
-description: Free and unlimited Google and Libretranslate translations and Google TTS. Fast and private. Via the SimplyTranslate API.
+version: 1.1.5
+description: Free and unlimited Google translations and TTS. Fast and private.
 #author: Marvin Perzi
 homepage: https://github.com/Persie0/SimplyTranslate-dart
 dependencies:

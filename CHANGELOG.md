@@ -1,5 +1,9 @@
 # Releases
 
+# 1.1.5
+- added Lingva translate
+- added speedTest() for execution time test of function
+
 # 1.1.4
 - fixed null error when no languages passed at tr()
 

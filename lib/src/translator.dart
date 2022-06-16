@@ -14,17 +14,18 @@ part './model/translation.dart';
 /// [author] Marvin Perzi.
 ///
 class SimplyTranslator {
-  var _baseUrl = instances[Random().nextInt(instances.length)];
+  var _baseUrlSimply = simplyInstances[Random().nextInt(simplyInstances.length)];
+  var _baseUrlLingva = lingvaInstances[Random().nextInt(lingvaInstances.length)];
 
-  /// faster than translate.google.com
-  final _path = '/api/translate/';
+  final _pathSimply = '/api/translate/';
+
   final _languageList = LanguageList();
 
   EngineType engine;
   SimplyTranslator(this.engine);
 
   /// Translates texts from specified language to another
-  Future<Translation> translate(String sourceText,
+  Future<Translation> translateSimply(String sourceText,
       {String from = 'auto',
       String to = 'en',
       InstanceMode instanceMode = InstanceMode.Loop,
@@ -45,21 +46,21 @@ class SimplyTranslator {
     ///Uses default instance or set instance
     ///Uses random instance
     if (instanceMode == InstanceMode.Random) {
-      _baseUrl = instances[Random().nextInt(instances.length)];
+      _baseUrlSimply = simplyInstances[Random().nextInt(simplyInstances.length)];
 
       ///Loops through the instance list
     } else if (instanceMode == InstanceMode.Loop) {
-      nextInstance();
+      nextSimplyInstance();
     }
     Uri url;
     dynamic jsonData;
     http.ClientException exeption = http.ClientException("");
     for (int ret = 0; ret <= retries; ret++) {
-      url = Uri.https(_baseUrl, _path);
+      url = Uri.https(_baseUrlSimply, _pathSimply);
       final data = await http.post(url, body: parameters);
 
       if (data.statusCode != 200) {
-        nextInstance();
+        nextSimplyInstance();
         exeption = http.ClientException(
             'Error ${data.statusCode}:\n\n ${data.body}', url);
         continue;
@@ -67,7 +68,7 @@ class SimplyTranslator {
 
       jsonData = jsonDecode(data.body);
       if (jsonData == null) {
-        nextInstance();
+        nextSimplyInstance();
         exeption = http.ClientException('Error: Can\'t parse json data');
         continue;
       }
@@ -109,7 +110,7 @@ class SimplyTranslator {
         }
       }
       List<String> frequencyTranslations = three + two + one;
-      frequencyTranslations.toSet().toList();
+      frequencyTranslations=frequencyTranslations.toSet().toList();
       for (var type in def.keys) {
         for (int i = 0; i < def[type].length; i++) {
           List<String> synonyms = [];
@@ -151,14 +152,25 @@ class SimplyTranslator {
     );
   }
 
-  void nextInstance() {
-    var index = instances.indexOf(_baseUrl);
-    if (index == instances.length - 1) {
+  void nextSimplyInstance() {
+    var index = simplyInstances.indexOf(_baseUrlSimply);
+    if (index == simplyInstances.length - 1) {
       index = 0;
     } else {
       index += 1;
     }
-    _baseUrl = instances[index];
+    _baseUrlSimply = simplyInstances[index];
+  }
+
+
+  void nextLingvaInstance() {
+    var index = lingvaInstances.indexOf(_baseUrlLingva);
+    if (index == lingvaInstances.length - 1) {
+      index = 0;
+    } else {
+      index += 1;
+    }
+    _baseUrlLingva = lingvaInstances[index];
   }
 
   ///get the TTSUrl of given input
@@ -174,27 +186,25 @@ class SimplyTranslator {
     return url;
   }
 
-  Future<String> tr(String sourceText, [String? from, String? to]) async {
+  Future<String> trSimply(String sourceText, [String? from, String? to]) async {
     final parameters = {
       'engine': engine.name,
       'from': from ?? "auto",
       'to': to ?? "en",
       'text': sourceText
     };
-    nextInstance();
+    nextSimplyInstance();
     Uri url;
     dynamic jsonData;
-    url = Uri.https(_baseUrl, _path);
+    url = Uri.https(_baseUrlSimply, _pathSimply);
     final data = await http.post(url, body: parameters);
     if (data.statusCode != 200) {
-      nextInstance();
       throw http.ClientException(
           'Error ${data.statusCode}:\n\n ${data.body}', url);
     }
 
     jsonData = jsonDecode(data.body);
     if (jsonData == null) {
-      nextInstance();
       throw http.ClientException('Error: Can\'t parse json data');
     }
     return jsonData['translated-text'];
@@ -202,16 +212,16 @@ class SimplyTranslator {
 
   /// Sets base URL to other instances:
   ///https:///simple-web.org/projects/simplytranslate.html
-  set setInstance(String url) => _baseUrl = url;
+  set setInstance(String url) => _baseUrlSimply = url;
 
   ///get the instances
-  get getInstances => instances;
+  get getInstances => simplyInstances;
 
   ///get the currently used instance
-  get getCurrentInstance => _baseUrl;
+  get getCurrentInstance => _baseUrlSimply;
 
   ///check if the passed instance is working
-  Future<bool> isInstanceWorking(String urlValue) async {
+  Future<bool> isSimplyInstanceWorking(String urlValue) async {
     Uri url;
     try {
       url = Uri.parse("https://$urlValue");
@@ -234,7 +244,7 @@ class SimplyTranslator {
   }
 
   ///update the instances with the API
-  Future<bool> updateInstances(
+  Future<bool> updateSimplyInstances(
       {List<String> blacklist = const ["tl.vern.cc"]}) async {
     try {
       final response = await http
@@ -247,16 +257,89 @@ class SimplyTranslator {
       for (var element in blacklist) {
         newInstances.remove(element);
       }
-      instances = newInstances;
+      simplyInstances = newInstances;
       return true;
     } catch (error) {
       return false;
     }
   }
+
+  ///fast translate with Lingva
+  Future<String> trLingva(String sourceText, [String? from, String? to]) async {
+    from= from ?? "auto";
+     to= to ?? "en";
+    Uri url;
+    dynamic jsonData;
+    url = Uri.parse("https://"+_baseUrlLingva+"/api/v1/"+from+"/"+to+"/"+sourceText);
+    nextLingvaInstance();
+    final data = await http.get(url);
+    if (data.statusCode != 200) {
+      throw http.ClientException(
+          'Error ${data.statusCode}:\n\n ${data.body}', url);
+    }
+
+    jsonData = jsonDecode(data.body);
+    if (jsonData == null) {
+      throw http.ClientException('Error: Can\'t parse json data');
+    }
+    print(jsonData);
+    return jsonData['translation'];
+  }
+
+  ///translate with Lingva
+  Future<List<String>> translateLingva(String sourceText, [String? from, String? to]) async {
+    from= from ?? "auto";
+    to= to ?? "en";
+    Uri url;
+    dynamic jsonData;
+    url = Uri.parse("https://"+_baseUrlLingva+"/api/v1/"+from+"/"+to+"/"+sourceText);
+    nextLingvaInstance();
+    final data = await http.get(url);
+    if (data.statusCode != 200) {
+      throw http.ClientException(
+          'Error ${data.statusCode}:\n\n ${data.body}', url);
+    }
+
+    jsonData = jsonDecode(data.body);
+    if (jsonData == null) {
+      throw http.ClientException('Error: Can\'t parse json data');
+    }
+    print(_baseUrlLingva);
+    List extraTransl=jsonData['info']["extraTranslations"]??[];
+    List<String> one = [];
+    List<String> two = [];
+    List<String> three = [];
+    for (int i = 0; i < extraTransl.length; i++) {
+      for(int t = 0; t < extraTransl[i]["list"].length; t++){
+        String word = extraTransl[i]["list"][t]["word"];
+        int frequency = extraTransl[i]["list"][t]["frequency"];
+        if (frequency == 3) {
+          three.add(word);
+        } else if (frequency == 2) {
+          two.add(word);
+        } else {
+          one.add(word);
+        }
+      }
+    }
+    List<String> frequencyTranslations = three + two + one;
+    return frequencyTranslations.toSet().toList();
+  }
+
+  Future<String> speedTest(Function function, [String? sourceText, String? from, String? to])async {
+    sourceText=sourceText??"Hallo";
+    from= from ?? "auto";
+    to= to ?? "en";
+    Stopwatch stopwatch = new Stopwatch()..start();
+    await function(sourceText, from, to);
+    return stopwatch.elapsed.inMilliseconds.toString()+"ms";
+  }
+
+
 }
 
 ///list with instances
-List<String> instances = [
+List<String> simplyInstances = [
   "simplytranslate.org",
   "st.tokhmi.xyz",
   "translate.josias.dev",
@@ -272,6 +355,12 @@ List<String> instances = [
   // "tl.vern.cc",
   "translate.slipfox.xyz"
 ];
+List<String> lingvaInstances = [
+  "lingva.lunar.icu",
+  "lingva.pussthecat.org",
+  //"translate.igna.ooo",
+  "lingva.ml",
+];
 
 ///Translation engines
 enum EngineType {
@@ -281,6 +370,10 @@ enum EngineType {
   libre,
 
   /// libretranslate
+}
+enum Site {
+  lingva,
+  simplytranslate,
 }
 
 ///mode
