@@ -15,9 +15,9 @@ part './model/translation.dart';
 ///
 class SimplyTranslator {
   var _baseUrlSimply =
-  simplyInstances[Random().nextInt(simplyInstances.length)];
+      simplyInstances[Random().nextInt(simplyInstances.length)];
   var _baseUrlLingva =
-  lingvaInstances[Random().nextInt(lingvaInstances.length)];
+      lingvaInstances[Random().nextInt(lingvaInstances.length)];
 
   final _pathSimply = '/api/translate/';
 
@@ -29,9 +29,9 @@ class SimplyTranslator {
   /// Translates texts from specified language to another
   Future<Translation> translateSimply(String sourceText,
       {String from = 'auto',
-        String to = 'en',
-        InstanceMode instanceMode = InstanceMode.Loop,
-        int retries = 1}) async {
+      String to = 'en',
+      InstanceMode instanceMode = InstanceMode.Loop,
+      int retries = 1}) async {
     for (var each in [from, to]) {
       if (!LanguageList.contains(each)) {
         throw LanguageNotSupportedException(each);
@@ -49,7 +49,7 @@ class SimplyTranslator {
     ///Uses random instance
     if (instanceMode == InstanceMode.Random) {
       _baseUrlSimply =
-      simplyInstances[Random().nextInt(simplyInstances.length)];
+          simplyInstances[Random().nextInt(simplyInstances.length)];
 
       ///Loops through the instance list
     } else if (instanceMode == InstanceMode.Loop) {
@@ -90,7 +90,7 @@ class SimplyTranslator {
     if (engine == EngineType.google) {
       var def = Map<String, dynamic>.from(jsonData['definitions'] ?? {});
       var translations =
-      Map<String, dynamic>.from(jsonData['translations'] ?? {});
+          Map<String, dynamic>.from(jsonData['translations'] ?? {});
       List<Translations> translList = [];
       List<Definitions> defList = [];
       List<String> one = [];
@@ -192,12 +192,8 @@ class SimplyTranslator {
   Future<List<int>> getTTSLingva(String text, String lang) async {
     Uri url;
     dynamic jsonData;
-    url = Uri.parse("https://" +
-        _baseUrlLingva +
-        "/api/v1/audio/" +
-        lang +
-        "/" +
-        text);
+    url = Uri.parse(
+        "https://" + _baseUrlLingva + "/api/v1/audio/" + lang + "/" + text);
     nextLingvaInstance();
     final data = await http.get(url);
     if (data.statusCode != 200) {
@@ -344,11 +340,11 @@ class SimplyTranslator {
     if (jsonData == null) {
       throw http.ClientException('Error: Can\'t parse json data');
     }
-    List<String> frequencyTranslations=[];
+    List<String> frequencyTranslations = [];
     Map info = jsonData['info'] ?? {};
-    if(info.isNotEmpty){
+    if (info.isNotEmpty) {
       List extraTransl = info["extraTranslations"] ?? [];
-      if(extraTransl.isNotEmpty) {
+      if (extraTransl.isNotEmpty) {
         List<String> one = [];
         List<String> two = [];
         List<String> three = [];
@@ -366,11 +362,10 @@ class SimplyTranslator {
           }
         }
         frequencyTranslations = three + two + one;
-      }
-      else{
+      } else {
         frequencyTranslations.add(jsonData['translation']);
-      }}
-    else{
+      }
+    } else {
       frequencyTranslations.add(jsonData['translation']);
     }
     return frequencyTranslations.toSet().toList();
