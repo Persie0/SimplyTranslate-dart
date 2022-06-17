@@ -10,7 +10,7 @@ void main() async {
   ///get "hello" as an Audio-Url
   ///uses always Google TTS as Libretranslate doesnt support TTS, gives same result
   ///you can use https://pub.dev/packages/audioplayers to play it
-  print(gt.getTTSUrl("hello", "en"));
+  print(gt.getTTSUrlSimply("hello", "en"));
   //https://simplytranslate.org/api/tts/?engine=google&lang=en&text=hello
 
   ///using Googletranslate:
@@ -117,5 +117,4 @@ void main() async {
     // translate.namazso.eu
     // translate.riverside.rocks,...
   }
-
 }
