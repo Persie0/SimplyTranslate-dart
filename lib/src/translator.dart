@@ -15,9 +15,9 @@ part './model/translation.dart';
 ///
 class SimplyTranslator {
   var _baseUrlSimply =
-      simplyInstances[Random().nextInt(simplyInstances.length)];
+  simplyInstances[Random().nextInt(simplyInstances.length)];
   var _baseUrlLingva =
-      lingvaInstances[Random().nextInt(lingvaInstances.length)];
+  lingvaInstances[Random().nextInt(lingvaInstances.length)];
 
   final _pathSimply = '/api/translate/';
 
@@ -29,9 +29,9 @@ class SimplyTranslator {
   /// Translates texts from specified language to another
   Future<Translation> translateSimply(String sourceText,
       {String from = 'auto',
-      String to = 'en',
-      InstanceMode instanceMode = InstanceMode.Loop,
-      int retries = 1}) async {
+        String to = 'en',
+        InstanceMode instanceMode = InstanceMode.Loop,
+        int retries = 1}) async {
     for (var each in [from, to]) {
       if (!LanguageList.contains(each)) {
         throw LanguageNotSupportedException(each);
@@ -49,7 +49,7 @@ class SimplyTranslator {
     ///Uses random instance
     if (instanceMode == InstanceMode.Random) {
       _baseUrlSimply =
-          simplyInstances[Random().nextInt(simplyInstances.length)];
+      simplyInstances[Random().nextInt(simplyInstances.length)];
 
       ///Loops through the instance list
     } else if (instanceMode == InstanceMode.Loop) {
@@ -90,7 +90,7 @@ class SimplyTranslator {
     if (engine == EngineType.google) {
       var def = Map<String, dynamic>.from(jsonData['definitions'] ?? {});
       var translations =
-          Map<String, dynamic>.from(jsonData['translations'] ?? {});
+      Map<String, dynamic>.from(jsonData['translations'] ?? {});
       List<Translations> translList = [];
       List<Definitions> defList = [];
       List<String> one = [];
@@ -347,29 +347,29 @@ class SimplyTranslator {
     List<String> frequencyTranslations=[];
     Map info = jsonData['info'] ?? {};
     if(info.isNotEmpty){
-    List extraTransl = info["extraTranslations"] ?? [];
-    if(extraTransl.isNotEmpty) {
-      List<String> one = [];
-      List<String> two = [];
-      List<String> three = [];
-      for (int i = 0; i < extraTransl.length; i++) {
-        for (int t = 0; t < extraTransl[i]["list"].length; t++) {
-          String word = extraTransl[i]["list"][t]["word"];
-          int frequency = extraTransl[i]["list"][t]["frequency"];
-          if (frequency == 3) {
-            three.add(word);
-          } else if (frequency == 2) {
-            two.add(word);
-          } else {
-            one.add(word);
+      List extraTransl = info["extraTranslations"] ?? [];
+      if(extraTransl.isNotEmpty) {
+        List<String> one = [];
+        List<String> two = [];
+        List<String> three = [];
+        for (int i = 0; i < extraTransl.length; i++) {
+          for (int t = 0; t < extraTransl[i]["list"].length; t++) {
+            String word = extraTransl[i]["list"][t]["word"];
+            int frequency = extraTransl[i]["list"][t]["frequency"];
+            if (frequency == 3) {
+              three.add(word);
+            } else if (frequency == 2) {
+              two.add(word);
+            } else {
+              one.add(word);
+            }
           }
         }
+        frequencyTranslations = three + two + one;
       }
-     frequencyTranslations = three + two + one;
-    }
-    else{
-      frequencyTranslations.add(jsonData['translation']);
-    }}
+      else{
+        frequencyTranslations.add(jsonData['translation']);
+      }}
     else{
       frequencyTranslations.add(jsonData['translation']);
     }
