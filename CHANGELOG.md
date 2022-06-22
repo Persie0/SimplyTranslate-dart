@@ -1,11 +1,6 @@
 # Releases
 
-# 1.2.0
-- added Lingva TTS
-- fixed Lingva tr()
-
-# 1.1.5
-- added Lingva translate
+# 1.2.1
 - added speedTest() for execution time test of function
 
 # 1.1.4

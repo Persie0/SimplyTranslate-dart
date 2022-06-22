@@ -1,7 +1,7 @@
 library simplytranslate;
 
 import 'dart:async';
-import 'dart:convert' show jsonDecode;
+import 'dart:convert';
 import 'dart:math';
 import 'package:http/http.dart' as http;
 import './langs/language.dart';
@@ -15,9 +15,7 @@ part './model/translation.dart';
 ///
 class SimplyTranslator {
   var _baseUrlSimply =
-      simplyInstances[Random().nextInt(simplyInstances.length)];
-  var _baseUrlLingva =
-      lingvaInstances[Random().nextInt(lingvaInstances.length)];
+  simplyInstances[Random().nextInt(simplyInstances.length)];
 
   final _pathSimply = '/api/translate/';
 
@@ -29,9 +27,9 @@ class SimplyTranslator {
   /// Translates texts from specified language to another
   Future<Translation> translateSimply(String sourceText,
       {String from = 'auto',
-      String to = 'en',
-      InstanceMode instanceMode = InstanceMode.Loop,
-      int retries = 1}) async {
+        String to = 'en',
+        InstanceMode instanceMode = InstanceMode.Loop,
+        int retries = 1}) async {
     for (var each in [from, to]) {
       if (!LanguageList.contains(each)) {
         throw LanguageNotSupportedException(each);
@@ -49,7 +47,7 @@ class SimplyTranslator {
     ///Uses random instance
     if (instanceMode == InstanceMode.Random) {
       _baseUrlSimply =
-          simplyInstances[Random().nextInt(simplyInstances.length)];
+      simplyInstances[Random().nextInt(simplyInstances.length)];
 
       ///Loops through the instance list
     } else if (instanceMode == InstanceMode.Loop) {
@@ -90,7 +88,7 @@ class SimplyTranslator {
     if (engine == EngineType.google) {
       var def = Map<String, dynamic>.from(jsonData['definitions'] ?? {});
       var translations =
-          Map<String, dynamic>.from(jsonData['translations'] ?? {});
+      Map<String, dynamic>.from(jsonData['translations'] ?? {});
       List<Translations> translList = [];
       List<Definitions> defList = [];
       List<String> one = [];
@@ -165,15 +163,6 @@ class SimplyTranslator {
     _baseUrlSimply = simplyInstances[index];
   }
 
-  void nextLingvaInstance() {
-    var index = lingvaInstances.indexOf(_baseUrlLingva);
-    if (index == lingvaInstances.length - 1) {
-      index = 0;
-    } else {
-      index += 1;
-    }
-    _baseUrlLingva = lingvaInstances[index];
-  }
 
   ///get the TTSUrl of given input
   String getTTSUrlSimply(String sourceText, String lang) {
@@ -188,25 +177,7 @@ class SimplyTranslator {
     return url;
   }
 
-  ///return the text audio as a Uint8Array (served as number[] in JSON)
-  Future<List<int>> getTTSLingva(String text, String lang) async {
-    Uri url;
-    dynamic jsonData;
-    url = Uri.parse(
-        "https://" + _baseUrlLingva + "/api/v1/audio/" + lang + "/" + text);
-    nextLingvaInstance();
-    final data = await http.get(url);
-    if (data.statusCode != 200) {
-      throw http.ClientException(
-          'Error ${data.statusCode}:\n\n ${data.body}', url);
-    }
 
-    jsonData = jsonDecode(data.body);
-    if (jsonData == null) {
-      throw http.ClientException('Error: Can\'t parse json data');
-    }
-    return jsonData['audio'].cast<int>();
-  }
 
   Future<String> trSimply(String sourceText, [String? from, String? to]) async {
     final parameters = {
@@ -286,90 +257,6 @@ class SimplyTranslator {
     }
   }
 
-  ///fast translate with Lingva
-  Future<String> trLingva(String sourceText, [String? from, String? to]) async {
-    from = from ?? "auto";
-    to = to ?? "en";
-    Uri url;
-    dynamic jsonData;
-    url = Uri.parse("https://" +
-        _baseUrlLingva +
-        "/api/v1/" +
-        from +
-        "/" +
-        to +
-        "/" +
-        sourceText);
-    nextLingvaInstance();
-    final data = await http.get(url);
-    if (data.statusCode != 200) {
-      throw http.ClientException(
-          'Error ${data.statusCode}:\n\n ${data.body}', url);
-    }
-
-    jsonData = jsonDecode(data.body);
-    if (jsonData == null) {
-      throw http.ClientException('Error: Can\'t parse json data');
-    }
-    return jsonData['translation'];
-  }
-
-  ///translate with Lingva
-  Future<List<String>> translateLingva(String sourceText,
-      [String? from, String? to]) async {
-    from = from ?? "auto";
-    to = to ?? "en";
-    Uri url;
-    dynamic jsonData;
-    url = Uri.parse("https://" +
-        _baseUrlLingva +
-        "/api/v1/" +
-        from +
-        "/" +
-        to +
-        "/" +
-        sourceText);
-    nextLingvaInstance();
-    final data = await http.get(url);
-    if (data.statusCode != 200) {
-      throw http.ClientException(
-          'Error ${data.statusCode}:\n\n ${data.body}', url);
-    }
-
-    jsonData = jsonDecode(data.body);
-    if (jsonData == null) {
-      throw http.ClientException('Error: Can\'t parse json data');
-    }
-    List<String> frequencyTranslations = [];
-    Map info = jsonData['info'] ?? {};
-    if (info.isNotEmpty) {
-      List extraTransl = info["extraTranslations"] ?? [];
-      if (extraTransl.isNotEmpty) {
-        List<String> one = [];
-        List<String> two = [];
-        List<String> three = [];
-        for (int i = 0; i < extraTransl.length; i++) {
-          for (int t = 0; t < extraTransl[i]["list"].length; t++) {
-            String word = extraTransl[i]["list"][t]["word"];
-            int frequency = extraTransl[i]["list"][t]["frequency"];
-            if (frequency == 3) {
-              three.add(word);
-            } else if (frequency == 2) {
-              two.add(word);
-            } else {
-              one.add(word);
-            }
-          }
-        }
-        frequencyTranslations = three + two + one;
-      } else {
-        frequencyTranslations.add(jsonData['translation']);
-      }
-    } else {
-      frequencyTranslations.add(jsonData['translation']);
-    }
-    return frequencyTranslations.toSet().toList();
-  }
 
   Future<String> speedTest(Function function,
       [String? sourceText, String? from, String? to]) async {
@@ -399,12 +286,7 @@ List<String> simplyInstances = [
   // "tl.vern.cc",
   "translate.slipfox.xyz"
 ];
-List<String> lingvaInstances = [
-  "lingva.lunar.icu",
-  "lingva.pussthecat.org",
-  "lingva.ml",
-];
-//"translate.igna.ooo",
+
 
 ///Translation engines
 enum EngineType {
@@ -416,10 +298,6 @@ enum EngineType {
   /// libretranslate
 }
 
-enum Site {
-  lingva,
-  simplytranslate,
-}
 
 ///mode
 enum Mode {
