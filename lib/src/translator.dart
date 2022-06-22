@@ -271,20 +271,7 @@ class SimplyTranslator {
 
 ///list with instances
 List<String> simplyInstances = [
-  "simplytranslate.org",
-  "st.tokhmi.xyz",
-  "translate.josias.dev",
-  "translate.namazso.eu",
-  "translate.riverside.rocks",
-  "st.manerakai.com",
-  "translate.bus-hit.me",
-  "simplytranslate.pussthecat.org",
-  "translate.northboot.xyz",
-  "translate.tiekoetter.com",
-  "simplytranslate.esmailelbob.xyz",
-  "translate.syncpundit.com",
-  // "tl.vern.cc",
-  "translate.slipfox.xyz"
+  "simplytranslate.org", "st.tokhmi.xyz", "translate.josias.dev", "translate.namazso.eu", "translate.riverside.rocks", "st.manerakai.com", "translate.bus-hit.me", "simplytranslate.pussthecat.org", "translate.northboot.xyz", "translate.tiekoetter.com", "simplytranslate.esmailelbob.xyz", "translate.slipfox.xyz", "st.privacydev.net", "translate.beparanoid.de", "translate.priv.pw"
 ];
 
 

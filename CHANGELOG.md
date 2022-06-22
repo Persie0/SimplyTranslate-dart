@@ -1,4 +1,6 @@
 # Releases
+# 1.2.2
+- updated instance list
 
 # 1.2.1
 - added speedTest() for execution time test of function

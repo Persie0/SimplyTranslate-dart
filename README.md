@@ -158,8 +158,7 @@ As Google only allows a limited amount of requests an alternative was needed.
 
 https://simplytranslate.org/
 
-https://github.com/TheDavidDelta/lingva-translate
-are free and open source and you still get Google Translation quality.
+is free and open source and you still get Google Translation quality.
 
 
 # Simplytranslate API docs
