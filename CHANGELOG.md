@@ -1,4 +1,7 @@
 # Releases
+# 1.2.3
+- updated dependencies
+
 # 1.2.2
 - updated instance list
 
