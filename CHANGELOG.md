@@ -1,4 +1,8 @@
 # Releases
+
+# 1.2.4
+- removed updateSimplyInstances() as it is does not work anymore (Codeberg project looks abandoned)
+
 # 1.2.3
 - updated dependencies
 

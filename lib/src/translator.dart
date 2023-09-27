@@ -207,8 +207,8 @@ class SimplyTranslator {
   ///https:///simple-web.org/projects/simplytranslate.html
   set setInstance(String url) => _baseUrlSimply = url;
 
-  ///get the instances
-  get getInstances => simplyInstances;
+  ///get the simply instances
+  get getSimplyInstances => simplyInstances;
 
   ///get the currently used instance
   get getCurrentInstance => _baseUrlSimply;
@@ -236,7 +236,7 @@ class SimplyTranslator {
     }
   }
 
-  ///update the instances with the API
+/*  ///update the instances with the API
   Future<bool> updateSimplyInstances(
       {List<String> blacklist = const ["tl.vern.cc"]}) async {
     try {
@@ -255,7 +255,7 @@ class SimplyTranslator {
     } catch (error) {
       return false;
     }
-  }
+  }*/
 
 
   Future<String> speedTest(Function function,
@@ -271,8 +271,9 @@ class SimplyTranslator {
 
 ///list with instances
 List<String> simplyInstances = [
-  "simplytranslate.org", "st.tokhmi.xyz", "translate.josias.dev", "translate.namazso.eu", "translate.riverside.rocks", "st.manerakai.com", "translate.bus-hit.me", "simplytranslate.pussthecat.org", "translate.northboot.xyz", "translate.tiekoetter.com", "simplytranslate.esmailelbob.xyz", "translate.slipfox.xyz", "st.privacydev.net", "translate.beparanoid.de", "translate.priv.pw"
-];
+  "trap.her.st",
+  "simplytranslate.pussthecat.org"
+  ];
 
 
 ///Translation engines
@@ -296,4 +297,12 @@ enum Mode {
 }
 
 ///behaviour of what Instance should be used with the next translation
-enum InstanceMode { Random, Loop, Same }
+enum InstanceMode {
+  ///Use random instance from the list
+  Random,
+  ///Use next instance in the list
+  Loop,
+  ///Same instance as before
+  Same,
+  ///Same instance as before but waiting 2s before requests
+  Lazy }

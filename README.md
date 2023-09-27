@@ -11,7 +11,12 @@ Pub: https://pub.dev/packages/simplytranslate
 
 # Usage 
 
+As I can't always update the instance list (simplytranslate instances are run by volunteers):
+- Search for new instances by simply googling "simplytranslate" and set the instance with setInstance = "instance"
+- You could update the instances before with a function but the Codeberg project of the original devs is not reachable anymore
+
 ```dart
+
 import 'package:simplytranslate/simplytranslate.dart';
 
 void main() async {
@@ -44,9 +49,6 @@ void main() async {
   /// get the list with instances
   print(gt.getInstances);
   //[simplytranslate.org, st.tokhmi.xyz, translate.josias.dev, ...
-
-  ///update instances with the API
-  gt.updateSimplyInstances();
 
   ///check if instance is working
   print(await gt.isSimplyInstanceWorking("simplytranslate.pussthecat.org"));
