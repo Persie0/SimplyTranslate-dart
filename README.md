@@ -1,15 +1,12 @@
-# simplytranslate
-Simple translate API for Dart / Flutter
+# SimplyTranslate-dart
 
-GitHub: https://github.com/Persie0/SimplyTranslate-dart
-
-Pub: https://pub.dev/packages/simplytranslate
+[GitHub](https://github.com/Persie0/SimplyTranslate-dart) | [Pub](https://pub.dev/packages/simplytranslate)
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/marvinperzi#)
 
 <a href="https://paypal.me/marvinperzi?country.x=AT&locale.x=de_DE"><img src="https://github.com/andreostrovsky/donate-with-paypal/raw/master/blue.svg" height="36"></a>
 
-# Usage 
+## Usage 
 
 As I can't always update the instance list (simplytranslate instances are run by volunteers):
 - Search for new instances by simply googling "simplytranslate" and set the instance with setInstance = "instance"
@@ -67,102 +64,15 @@ void main() async {
   textResult = await lt.trSimply("Er läuft schnell.");
   print(textResult);
   //he's running fast.
-
-  ///long form, switching to next instance, 4 retries if it fails (default 1)
-  var libTransl = await lt.translateSimply(
-      "The dispositions were very complicated and difficult.",
-      from: 'en',
-      to: 'de',
-      instanceMode: InstanceMode.Loop,
-      retries: 4);
-  print(libTransl.translations.text);
-  //Die Anordnungen waren sehr kompliziert und schwierig.
-
-  ///without source language (auto) and choosing a random instance:
-  libTransl = await lt.translateSimply(
-      "The dispositions were very complicated and difficult.",
-      to: 'de',
-      instanceMode: InstanceMode.Random);
-  print(libTransl.translations.text);
-  //Die Anordnungen waren sehr kompliziert und schwierig.
-
-  ///long form to also get definitions and single word translations and switching to next instance, 4 retries if it fails (default 1)
-  var gtransl = await gt.translateSimply(
-      "The dispositions were very complicated and difficult.",
-      from: 'en',
-      to: 'de',
-      instanceMode: InstanceMode.Loop,
-      retries: 4);
-
-  ///get whole Text translation
-  ///Returns String
-  print(gtransl.translations.text);
-  //Die Dispositionen waren sehr kompliziert und schwierig.
-
-  ///without source language (auto):
-  gtransl = await gt.translateSimply(
-      "The dispositions were very complicated and difficult.",
-      to: 'de');
-  //Die Dispositionen waren sehr kompliziert und schwierig.
-
-  ///get multiple word translations in target language from Google
-  ///returns Map<String, dynamic>
-  gtransl = await gt.translateSimply("exuberance", from: 'en', to: 'de');
-  print(gtransl.translations.rawTranslations);
-  //{adjective: {dick: {frequency: 1/3, words: [thick, fat, large, big, heavy, stout]}, faustdick: {frequency: 1/3,...
-
-  ///get multiple word definitions in native language from Google
-  ///returns Map<String, dynamic>
-  print(gtransl.translations.rawDefinitions);
-  //{adjective: [{definition: of considerable size, extent, or intensity., synonyms: {: [large, sizeable,...
-
-  //get single word translations sorted by frequency
-  print(gtransl.translations.frequencyTranslations);
-  //[sehr, stark, bloß, genau, äußerste]
-
-  ///get Lists with Translations and Definitions
-  print(gtransl.translations.translations);
-  print(gtransl.translations.definitions);
-
-  ///changing instance each time
-  for (int i = 0; i < gt.getInstances.length; i++) {
-    gtransl = await gt.translateSimply("Gewechselt",
-        from: "de", instanceMode: InstanceMode.Random);
-    print(gt.getCurrentInstance);
-    //translate.josias.dev
-    // translate.namazso.eu
-    // translate.riverside.rocks,...
-  }
-
-}
 ```
-&nbsp;
 
-# Info
-- Max char length for Japanese, Chinese and Korean is 1250 (I think) for other languages its 5000 due to the different encoding results
-- You can use https://pub.dev/packages/audioplayers for playing the TTS.
+## Info
+- Max char length for Japanese, Chinese, and Korean is 1250. For other languages, it's 5000 due to different encoding results.
 
-# Credits
-go to 
-Gabriel Pacheco
+## Credits
+This package is based on [Gabriel Pacheco's google-translator](https://github.com/gabrielpacheco23/google-translator), distributed under the MIT License.
 
-https://github.com/gabrielpacheco23/google-translator
+As Google has request limitations, [SimplyTranslate](https://simplytranslate.org/) provides a free and open-source alternative with Google Translation quality.
 
-distributed under the
-```
-MIT License
-Copyright (c) 2021 Gabriel Pacheco
-```
-which was used as a template for this package.
-
-
-As Google only allows a limited amount of requests an alternative was needed.
-
-https://simplytranslate.org/
-
-is free and open source and you still get Google Translation quality.
-
-
-# Simplytranslate API docs
-Simplytranslate API docs:  https://git.sr.ht/~metalune/simplytranslate_web/tree/HEAD/api.md
-&nbsp;
+## Simplytranslate API docs
+[Simplytranslate API docs](https://git.sr.ht/~metalune/simplytranslate_web/tree/HEAD/api.md)
