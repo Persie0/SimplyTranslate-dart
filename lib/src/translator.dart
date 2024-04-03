@@ -5,7 +5,6 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:http/http.dart' as http;
 import './langs/language.dart';
-
 part './model/translation.dart';
 
 ///
@@ -15,7 +14,9 @@ part './model/translation.dart';
 ///
 class SimplyTranslator {
   var _baseUrlSimply =
-  simplyInstances[Random().nextInt(simplyInstances.length)];
+      simplyInstances[Random().nextInt(simplyInstances.length)];
+  var _baseUrlLingva =
+      lingvaInstances[Random().nextInt(lingvaInstances.length)];
 
   final _pathSimply = '/api/translate/';
 
@@ -24,12 +25,12 @@ class SimplyTranslator {
   EngineType engine;
   SimplyTranslator(this.engine);
 
-  /// Translates texts from specified language to another
+  /// slow for text, Translates texts from specified language to another
   Future<Translation> translateSimply(String sourceText,
       {String from = 'auto',
-        String to = 'en',
-        InstanceMode instanceMode = InstanceMode.Loop,
-        int retries = 1}) async {
+      String to = 'en',
+      InstanceMode instanceMode = InstanceMode.Loop,
+      int retries = 1}) async {
     for (var each in [from, to]) {
       if (!LanguageList.contains(each)) {
         throw LanguageNotSupportedException(each);
@@ -47,18 +48,31 @@ class SimplyTranslator {
     ///Uses random instance
     if (instanceMode == InstanceMode.Random) {
       _baseUrlSimply =
-      simplyInstances[Random().nextInt(simplyInstances.length)];
+          simplyInstances[Random().nextInt(simplyInstances.length)];
 
       ///Loops through the instance list
     } else if (instanceMode == InstanceMode.Loop) {
       nextSimplyInstance();
+    } else if (instanceMode == InstanceMode.Lazy) {
+      //wait 2s
+      await Future.delayed(const Duration(seconds: 2));
+    } else if (instanceMode == InstanceMode.Lazy) {
+      //wait 2s
+      await Future.delayed(const Duration(seconds: 2));
     }
     Uri url;
     dynamic jsonData;
     http.ClientException exeption = http.ClientException("");
     for (int ret = 0; ret <= retries; ret++) {
       url = Uri.https(_baseUrlSimply, _pathSimply);
-      final data = await http.post(url, body: parameters);
+      final data = await http.post(url, body: parameters).timeout(
+        const Duration(seconds: 5),
+        onTimeout: () {
+          // Time has run out, do what you wanted to do.
+          return http.Response(
+              'Error', 408); // Request Timeout response status code
+        },
+      );
 
       if (data.statusCode != 200) {
         nextSimplyInstance();
@@ -88,7 +102,7 @@ class SimplyTranslator {
     if (engine == EngineType.google) {
       var def = Map<String, dynamic>.from(jsonData['definitions'] ?? {});
       var translations =
-      Map<String, dynamic>.from(jsonData['translations'] ?? {});
+          Map<String, dynamic>.from(jsonData['translations'] ?? {});
       List<Translations> translList = [];
       List<Definitions> defList = [];
       List<String> one = [];
@@ -136,13 +150,17 @@ class SimplyTranslator {
               useInSentence, archaicSynonyms, dictionary));
         }
       }
-      trans = Result(jsonData['translated-text'], def, translations, translList,
-          defList, frequencyTranslations, types);
+      String translation =
+          jsonData['translated-text'] ?? jsonData['translated_text'];
+      trans = Result(translation, def, translations, translList, defList,
+          frequencyTranslations, types);
     }
 
     ///should use Libre Translate
     else {
-      trans = Result(jsonData['translated-text'], {}, {}, [], [], [], []);
+      String translation2 =
+          jsonData['translated-text'] ?? jsonData['translated_text'];
+      trans = Result(translation2, {}, {}, [], [], [], []);
     }
 
     return _Translation(
@@ -163,6 +181,15 @@ class SimplyTranslator {
     _baseUrlSimply = simplyInstances[index];
   }
 
+  void nextLingvaInstance() {
+    var index = lingvaInstances.indexOf(_baseUrlLingva);
+    if (index == lingvaInstances.length - 1) {
+      index = 0;
+    } else {
+      index += 1;
+    }
+    _baseUrlLingva = lingvaInstances[index];
+  }
 
   ///get the TTSUrl of given input
   String getTTSUrlSimply(String sourceText, String lang) {
@@ -177,8 +204,71 @@ class SimplyTranslator {
     return url;
   }
 
+  ///return the text audio as a Uint8Array (served as number[] in JSON)
+  Future<List<int>> getTTSLingva(String text, String lang) async {
+    Uri url;
+    dynamic jsonData;
+    url = Uri.parse(
+        "https://" + _baseUrlLingva + "/api/v1/audio/" + lang + "/" + text);
+    nextLingvaInstance();
+    final data = await http.get(url).timeout(
+      const Duration(seconds: 5),
+      onTimeout: () {
+        // Time has run out, do what you wanted to do.
+        return http.Response(
+            'Error', 408); // Request Timeout response status code
+      },
+    );
+    if (data.statusCode != 200) {
+      throw http.ClientException(
+          'Error ${data.statusCode}:\n\n ${data.body}', url);
+    }
 
+    jsonData = jsonDecode(data.body);
+    if (jsonData == null) {
+      throw http.ClientException('Error: Can\'t parse json data');
+    }
+    return jsonData['audio'].cast<int>();
+  }
 
+  ///get long text translation with GQL
+  Future<String> trLingvaGraphQL(String sourceText,
+      [String? from, String? to]) async {
+    var url = Uri.parse("https://$_baseUrlLingva/api/graphql");
+    var graphqlQuery = {
+      "query":
+          'query {translation(source:"$from" target:"$to" query:"$sourceText") {target {text}}}',
+    };
+    var en = jsonEncode(graphqlQuery);
+    final data = await http.post(url, body: en).timeout(
+      const Duration(seconds: 5),
+      onTimeout: () {
+        // Time has run out, do what you wanted to do.
+        return http.Response(
+            'Error', 408); // Request Timeout response status code
+      },
+    );
+    if (data.statusCode != 200) {
+      throw http.ClientException('Error ${data.statusCode}: ${data.body}', url);
+    }
+
+    var jsonData = jsonDecode(
+      utf8.decode(data.body.runes.toList()),
+    );
+    if (jsonData == null) {
+      throw http.ClientException('Error: Can\'t parse json data');
+    }
+    var res = "";
+    if (jsonData["errors"] != null) {
+      throw http.ClientException(
+          'Error:\n\n ${jsonData["errors"][0]["message"]}');
+    } else {
+      res = jsonData["data"]["translation"]["target"]["text"];
+    }
+    return res;
+  }
+
+  ///slow simply for sentence
   Future<String> trSimply(String sourceText, [String? from, String? to]) async {
     final parameters = {
       'engine': engine.name,
@@ -190,7 +280,14 @@ class SimplyTranslator {
     Uri url;
     dynamic jsonData;
     url = Uri.https(_baseUrlSimply, _pathSimply);
-    final data = await http.post(url, body: parameters);
+    final data = await http.post(url, body: parameters).timeout(
+      const Duration(seconds: 5),
+      onTimeout: () {
+        // Time has run out, do what you wanted to do.
+        return http.Response(
+            'Error', 408); // Request Timeout response status code
+      },
+    );
     if (data.statusCode != 200) {
       throw http.ClientException(
           'Error ${data.statusCode}:\n\n ${data.body}', url);
@@ -200,18 +297,24 @@ class SimplyTranslator {
     if (jsonData == null) {
       throw http.ClientException('Error: Can\'t parse json data');
     }
+    if (jsonData['translated-text'] == null) {
+      return jsonData['translated_text'];
+    }
     return jsonData['translated-text'];
   }
 
   /// Sets base URL to other instances:
   ///https:///simple-web.org/projects/simplytranslate.html
-  set setInstance(String url) => _baseUrlSimply = url;
+  set setSimplyInstance(String url) => _baseUrlSimply = url;
+  set setLingvaInstance(String url) => _baseUrlLingva = url;
 
-  ///get the simply instances
+  ///get the instances
   get getSimplyInstances => simplyInstances;
+  get getLingvaInstances => lingvaInstances;
 
   ///get the currently used instance
-  get getCurrentInstance => _baseUrlSimply;
+  get getCurrentSimplyInstance => _baseUrlSimply;
+  get getCurrentLingvaInstance => _baseUrlLingva;
 
   ///check if the passed instance is working
   Future<bool> isSimplyInstanceWorking(String urlValue) async {
@@ -257,6 +360,270 @@ class SimplyTranslator {
     }
   }*/
 
+  ///fetch the instances from (own) API, not always up to date
+  Future<bool> fetchLingvaInstances() async {
+    final url =
+        "https://raw.githubusercontent.com/Persie0/Persie0.github.io/main/pareader/simply.json";
+
+    try {
+      final response = await http.get(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        // If the server returns a 200 OK response, parse the JSON data here
+        final jsonData = jsonDecode(response.body);
+
+        lingvaInstances = jsonData["list"].cast<String>();
+        //remove https:// and / at the end
+        for (int i = 0; i < lingvaInstances.length; i++) {
+          lingvaInstances[i] = lingvaInstances[i].replaceAll("https://", "");
+          if (lingvaInstances[i].endsWith("/")) {
+            lingvaInstances[i] =
+                lingvaInstances[i].substring(0, lingvaInstances[i].length - 1);
+          }
+        }
+        return true;
+      } else {
+        // If the server did not return a 200 OK response, handle the error here
+        print("Failed to fetch data. Status code: ${response.statusCode}");
+      }
+    } catch (e) {
+      // Handle any exceptions that occur during the HTTP request
+      print("Error: $e");
+    }
+    return false;
+  }
+
+  ///fetch the instances from the (own) API, not always up to date
+  Future<bool> fetchSimplyInstances() async {
+    final url =
+        "https://raw.githubusercontent.com/Persie0/Persie0.github.io/main/pareader/simply.json";
+
+    try {
+      final response = await http.get(Uri.parse(url));
+
+      if (response.statusCode == 200) {
+        // If the server returns a 200 OK response, parse the JSON data here
+        final jsonData = jsonDecode(response.body);
+
+        simplyInstances = jsonData["list"].cast<String>();
+        for (int i = 0; i < simplyInstances.length; i++) {
+          simplyInstances[i] = simplyInstances[i].replaceAll("https://", "");
+          if (simplyInstances[i].endsWith("/")) {
+            simplyInstances[i] =
+                simplyInstances[i].substring(0, simplyInstances[i].length - 1);
+          }
+        }
+        return true;
+      } else {
+        // If the server did not return a 200 OK response, handle the error here
+        print("Failed to fetch data. Status code: ${response.statusCode}");
+      }
+    } catch (e) {
+      // Handle any exceptions that occur during the HTTP request
+      print("Error: $e");
+    }
+    return false;
+  }
+
+  ///slow translate with Lingva for text
+  Future<String> trLingva(String sourceText,
+      [String? from, String? to, bool? wait2s]) async {
+    from = from ?? "auto";
+    to = to ?? "en";
+    Uri url;
+    dynamic jsonData;
+
+    url = Uri.parse("https://" +
+        _baseUrlLingva +
+        "/api/v1/" +
+        from +
+        "/" +
+        to +
+        "/" +
+        sourceText);
+    if (wait2s == true) {
+      //wait 2s
+      await Future.delayed(const Duration(seconds: 2));
+    } else {
+      nextLingvaInstance();
+    }
+    final data = await http.get(url).timeout(
+      const Duration(seconds: 5),
+      onTimeout: () {
+        // Time has run out, do what you wanted to do.
+        return http.Response(
+            'Error', 408); // Request Timeout response status code
+      },
+    );
+    if (data.statusCode != 200) {
+      throw http.ClientException(
+          'Error ${data.statusCode}:\n\n ${data.body}', url);
+    }
+
+    jsonData = jsonDecode(data.body);
+    if (jsonData == null) {
+      throw http.ClientException('Error: Can\'t parse json data');
+    }
+    return jsonData['translation'];
+  }
+
+  ///get many single word translations, slow
+  Future<List<String>> translateLingvaGQL(
+    String sourceText, [
+    String? from,
+    String? to,
+    InstanceMode instanceMode = InstanceMode.Lazy,
+  ]) async {
+    from = from ?? "auto";
+    to = to ?? "en";
+    var url = Uri.parse("https://$_baseUrlLingva/api/graphql");
+    var graphqlQuery = {
+      "query":
+          'query {translation(source:"$from" target:"$to" query:"$sourceText") {target {text extraTranslations{list{word article frequency meanings}} }}}',
+    };
+    var en = jsonEncode(graphqlQuery);
+    //wait 2s
+    if (instanceMode == InstanceMode.Lazy) {
+      await Future.delayed(const Duration(seconds: 2));
+    }
+    final data = await http.post(url, body: en).timeout(
+      const Duration(seconds: 5),
+      onTimeout: () {
+        // Time has run out, do what you wanted to do.
+        return http.Response(
+            'Error', 408); // Request Timeout response status code
+      },
+    );
+    if (data.statusCode != 200) {
+      throw http.ClientException('Error ${data.statusCode}: ${data.body}', url);
+    }
+
+    var jsonData = jsonDecode(
+      utf8.decode(data.body.runes.toList()),
+    );
+    if (jsonData == null) {
+      throw http.ClientException('Error: Can\'t parse json data');
+    }
+    var res = jsonData["data"]["translation"]["target"];
+    List frequencyTranslations = [];
+    if (jsonData["errors"] != null) {
+      throw http.ClientException(
+          'Error:\n\n ${jsonData["errors"][0]["message"]}');
+    } else {
+      if (res["extraTranslations"] != null &&
+          res["extraTranslations"] != "null") // "null"
+      {
+        frequencyTranslations = res["extraTranslations"];
+      }
+    }
+//continue
+    /*Map info = jsonData['info'] ?? {};*/
+    if (frequencyTranslations.isNotEmpty) {
+      /*List extraTransl = info["extraTranslations"] ?? [];*/
+      if (frequencyTranslations.isNotEmpty) {
+        List<String> one = [];
+        List<String> two = [];
+        List<String> three = [];
+        for (int i = 0; i < frequencyTranslations.length; i++) {
+          for (int t = 0; t < frequencyTranslations[i]["list"].length; t++) {
+            String word = frequencyTranslations[i]["list"][t]["word"];
+            int frequency = frequencyTranslations[i]["list"][t]["frequency"];
+            if (frequency == 3) {
+              three.add(word);
+            } else if (frequency == 2) {
+              two.add(word);
+            } else {
+              one.add(word);
+            }
+          }
+        }
+        frequencyTranslations = three + two + one;
+      } else {
+        frequencyTranslations.add(jsonData['translation']);
+      }
+    } else {
+      frequencyTranslations.add(jsonData['translation']);
+    }
+    if (frequencyTranslations[0] == null ||
+        frequencyTranslations[0] == "null") {
+      frequencyTranslations = [];
+    }
+    return frequencyTranslations.cast<String>().toSet().toList();
+  }
+
+  ///translate with Lingva, get single translations as List
+  Future<List<String>> translateLingva(
+    String sourceText, [
+    String? from,
+    String? to,
+    InstanceMode instanceMode = InstanceMode.Lazy,
+  ]) async {
+    from = from ?? "auto";
+    to = to ?? "en";
+    Uri url;
+    dynamic jsonData;
+    url = Uri.parse("https://" +
+        _baseUrlLingva +
+        "/api/v1/" +
+        from +
+        "/" +
+        to +
+        "/" +
+        sourceText);
+
+    if (instanceMode == InstanceMode.Lazy) {
+      //wait 2s
+      await Future.delayed(const Duration(seconds: 2));
+    } else {
+      nextLingvaInstance();
+    }
+    final data = await http.get(url).timeout(
+      const Duration(seconds: 5),
+      onTimeout: () {
+        // Time has run out, do what you wanted to do.
+        return http.Response(
+            'Error', 408); // Request Timeout response status code
+      },
+    );
+    if (data.statusCode != 200) {
+      throw http.ClientException(
+          'Error ${data.statusCode}:\n\n ${data.body}', url);
+    }
+
+    jsonData = jsonDecode(data.body);
+    if (jsonData == null) {
+      throw http.ClientException('Error: Can\'t parse json data');
+    }
+    List<String> frequencyTranslations = [];
+    Map info = jsonData['info'] ?? {};
+    if (info.isNotEmpty) {
+      List extraTransl = info["extraTranslations"] ?? [];
+      if (extraTransl.isNotEmpty) {
+        List<String> one = [];
+        List<String> two = [];
+        List<String> three = [];
+        for (int i = 0; i < extraTransl.length; i++) {
+          for (int t = 0; t < extraTransl[i]["list"].length; t++) {
+            String word = extraTransl[i]["list"][t]["word"];
+            int frequency = extraTransl[i]["list"][t]["frequency"];
+            if (frequency == 3) {
+              three.add(word);
+            } else if (frequency == 2) {
+              two.add(word);
+            } else {
+              one.add(word);
+            }
+          }
+        }
+        frequencyTranslations = three + two + one;
+      } else {
+        frequencyTranslations.add(jsonData['translation']);
+      }
+    } else {
+      frequencyTranslations.add(jsonData['translation']);
+    }
+    return frequencyTranslations.toSet().toList();
+  }
 
   Future<String> speedTest(Function function,
       [String? sourceText, String? from, String? to]) async {
@@ -271,10 +638,11 @@ class SimplyTranslator {
 
 ///list with instances
 List<String> simplyInstances = [
-  "trap.her.st",
+  "simplytranslate.org",
+  "translate.birdcat.cafe",
   "simplytranslate.pussthecat.org"
-  ];
-
+];
+List<String> lingvaInstances = ["translate.plausibility.cloud", "lingva.ml"];
 
 ///Translation engines
 enum EngineType {
@@ -286,6 +654,10 @@ enum EngineType {
   /// libretranslate
 }
 
+enum Site {
+  lingva,
+  simplytranslate,
+}
 
 ///mode
 enum Mode {
@@ -297,12 +669,4 @@ enum Mode {
 }
 
 ///behaviour of what Instance should be used with the next translation
-enum InstanceMode {
-  ///Use random instance from the list
-  Random,
-  ///Use next instance in the list
-  Loop,
-  ///Same instance as before
-  Same,
-  ///Same instance as before but waiting 2s before requests
-  Lazy }
+enum InstanceMode { Random, Loop, Same, Lazy }

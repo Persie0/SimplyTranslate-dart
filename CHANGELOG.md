@@ -1,7 +1,13 @@
 # Releases
 
+# 2.0.0
+- added Lingva Translate
+- updated instances list
+- updated dependencies
+
 # 1.2.4
 - removed updateSimplyInstances() as it is does not work anymore (Codeberg project looks abandoned)
+- updated instances list
 
 # 1.2.3
 - updated dependencies

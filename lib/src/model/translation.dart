@@ -1,4 +1,4 @@
-part of simplytranslate;
+part of '../translator.dart';
 
 ///Result includes the different translation results
 class Result {

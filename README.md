@@ -8,9 +8,9 @@
 
 ## Usage 
 
-As I can't always update the instance list (simplytranslate instances are run by volunteers):
-- Search for new instances by simply googling "simplytranslate" and set the instance with setInstance = "instance"
-- You could update the instances before with a function but the Codeberg project of the original devs is not reachable anymore
+As I can't always update the instance list (instances are run by volunteers and can be turned off at any time):
+- Search for new instances by googling "simplytranslate" or "lingva translate" and set the instance with setInstance = "instance"
+- lingva instances can also be found [here](https://github.com/thedaviddelta/lingva-translate?tab=readme-ov-file#instances)
 
 ```dart
 
@@ -26,7 +26,7 @@ void main() async {
   ///get "hello" as an Audio-Url
   ///uses always Google TTS as Libretranslate doesnt support TTS, gives same result
   ///you can use https://pub.dev/packages/audioplayers to play it
-  print(gt.getTTSUrl("hello", "en"));
+  print(gt.getTTSUrlSimply("hello", "en"));
   //https://simplytranslate.org/api/tts/?engine=google&lang=en&text=hello
 
   ///using Googletranslate:
@@ -47,6 +47,9 @@ void main() async {
   print(gt.getInstances);
   //[simplytranslate.org, st.tokhmi.xyz, translate.josias.dev, ...
 
+  ///update instances with the API
+  gt.updateSimplyInstances();
+
   ///check if instance is working
   print(await gt.isSimplyInstanceWorking("simplytranslate.pussthecat.org"));
   //true
@@ -64,6 +67,73 @@ void main() async {
   textResult = await lt.trSimply("Er läuft schnell.");
   print(textResult);
   //he's running fast.
+
+  ///long form, switching to next instance, 4 retries if it fails (default 1)
+  var libTransl = await lt.translateSimply(
+      "The dispositions were very complicated and difficult.",
+      from: 'en',
+      to: 'de',
+      instanceMode: InstanceMode.Loop,
+      retries: 4);
+  print(libTransl.translations.text);
+  //Die Anordnungen waren sehr kompliziert und schwierig.
+
+  ///without source language (auto) and choosing a random instance:
+  libTransl = await lt.translateSimply(
+      "The dispositions were very complicated and difficult.",
+      to: 'de',
+      instanceMode: InstanceMode.Random);
+  print(libTransl.translations.text);
+  //Die Anordnungen waren sehr kompliziert und schwierig.
+
+  ///long form to also get definitions and single word translations and switching to next instance, 4 retries if it fails (default 1)
+  var gtransl = await gt.translateSimply(
+      "The dispositions were very complicated and difficult.",
+      from: 'en',
+      to: 'de',
+      instanceMode: InstanceMode.Loop,
+      retries: 4);
+
+  ///get whole Text translation
+  ///Returns String
+  print(gtransl.translations.text);
+  //Die Dispositionen waren sehr kompliziert und schwierig.
+
+  ///without source language (auto):
+  gtransl = await gt.translateSimply(
+      "The dispositions were very complicated and difficult.",
+      to: 'de');
+  //Die Dispositionen waren sehr kompliziert und schwierig.
+
+  ///get multiple word translations in target language from Google
+  ///returns Map<String, dynamic>
+  gtransl = await gt.translateSimply("exuberance", from: 'en', to: 'de');
+  print(gtransl.translations.rawTranslations);
+  //{adjective: {dick: {frequency: 1/3, words: [thick, fat, large, big, heavy, stout]}, faustdick: {frequency: 1/3,...
+
+  ///get multiple word definitions in native language from Google
+  ///returns Map<String, dynamic>
+  print(gtransl.translations.rawDefinitions);
+  //{adjective: [{definition: of considerable size, extent, or intensity., synonyms: {: [large, sizeable,...
+
+  //get single word translations sorted by frequency
+  print(gtransl.translations.frequencyTranslations);
+  //[sehr, stark, bloß, genau, äußerste]
+
+  ///get Lists with Translations and Definitions
+  print(gtransl.translations.translations);
+  print(gtransl.translations.definitions);
+
+  ///changing instance each time
+  for (int i = 0; i < gt.getInstances.length; i++) {
+    gtransl = await gt.translateSimply("Gewechselt",
+        from: "de", instanceMode: InstanceMode.Random);
+    print(gt.getCurrentInstance);
+    //translate.josias.dev
+    // translate.namazso.eu
+    // translate.riverside.rocks,...
+  }
+}
 ```
 
 ## Info
