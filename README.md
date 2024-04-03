@@ -8,7 +8,9 @@
 
 ## Info
 A Dart package to translate text using SimplyTranslate, Lingva Translate, and LibreTranslate. 
+
 [SimplyTranslate](https://codeberg.org/ManeraKai/simplytranslate) and [Lingva Translate](https://github.com/thedaviddelta/lingva-translate) are free and open-source alternatives to Google Translate (that make use of Google Translate under the hood).
+
 [LibreTranslate](https://github.com/LibreTranslate/LibreTranslate) is a free and open-source alternative to Google Translate that uses a open-source translation engine.
 ## Usage 
 
@@ -178,6 +180,3 @@ void main() async {
 This package is based on [Gabriel Pacheco's google-translator](https://github.com/gabrielpacheco23/google-translator), distributed under the MIT License.
 
 As Google has request limitations, [SimplyTranslate](https://simplytranslate.org/) provides a free and open-source alternative with Google Translation quality.
-
-## Simplytranslate API docs
-[Simplytranslate API docs](https://git.sr.ht/~metalune/simplytranslate_web/tree/HEAD/api.md)
