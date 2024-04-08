@@ -4,8 +4,10 @@ void main() async {
   ///if you do not specify the source language it is automatically selecting it depending on the text
   ///if you do not specify the target language it is automatically English
 
+
   //////////////////////////////////
   // SimplyTranslate (=Google Translate)
+  // pretty much all functions are the same for Lingva Translate
   //////////////////////////////////
   final st = SimplyTranslator(EngineType.google);
 
@@ -16,6 +18,10 @@ void main() async {
   /// get the list with instances
   print(st.getSimplyInstances);
   //[simplytranslate.org, st.tokhmi.xyz, translate.josias.dev, ...
+
+  /// unofficially update the list with instances (also not always up to date)
+  print(await st.fetchSimplyInstances());
+  //true
 
   ///check if instance is working
   print(await st.isSimplyInstanceWorking("simplytranslate.pussthecat.org"));

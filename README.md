@@ -4,10 +4,12 @@
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/marvinperzi#)
 
-<a href="https://paypal.me/marvinperzi?country.x=AT&locale.x=de_DE"><img src="https://github.com/andreostrovsky/donate-with-paypal/raw/master/blue.svg" height="36"></a>
+<a href="https://paypal.me/persie0"><img src="https://github.com/andreostrovsky/donate-with-paypal/raw/master/blue.svg" height="36"></a>
 
 ## Info
 A Dart package to translate text using SimplyTranslate, Lingva Translate, and LibreTranslate. 
+
+TTS is also supported.
 
 [SimplyTranslate](https://codeberg.org/ManeraKai/simplytranslate) and [Lingva Translate](https://github.com/thedaviddelta/lingva-translate) are free and open-source alternatives to Google Translate (that make use of Google Translate under the hood).
 
@@ -25,8 +27,10 @@ void main() async {
   ///if you do not specify the source language it is automatically selecting it depending on the text
   ///if you do not specify the target language it is automatically English
 
+
   //////////////////////////////////
   // SimplyTranslate (=Google Translate)
+  // pretty much all functions are the same for Lingva Translate
   //////////////////////////////////
   final st = SimplyTranslator(EngineType.google);
 
@@ -37,6 +41,10 @@ void main() async {
   /// get the list with instances
   print(st.getSimplyInstances);
   //[simplytranslate.org, st.tokhmi.xyz, translate.josias.dev, ...
+
+  /// unofficially update the list with instances (also not always up to date)
+  print(await st.fetchSimplyInstances());
+  //true
 
   ///check if instance is working
   print(await st.isSimplyInstanceWorking("simplytranslate.pussthecat.org"));
@@ -175,6 +183,9 @@ void main() async {
 
 ## Info
 - Max char length for Japanese, Chinese, and Korean is around 1250. For other languages, it's around 5000 due to different encoding results.
+
+## Apps using SimplyTranslate
+- [Pareader](https://play.google.com/store/apps/details?id=at.austriao.pareader) - Learn languages with news articles in multiple languages and translate words with a simple tap.
 
 ## Credits
 This package is based on [Gabriel Pacheco's google-translator](https://github.com/gabrielpacheco23/google-translator), distributed under the MIT License.

@@ -1,5 +1,8 @@
 # Releases
 
+# 2.0.1
+- add function to update instances with unofficial github repo
+
 # 2.0.0
 - added Lingva Translate
 - updated instances list
