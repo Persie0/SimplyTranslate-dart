@@ -1,5 +1,8 @@
 # Releases
 
+# 2.0.2
+- improved documentation, removed unnecessary code
+
 # 2.0.1
 - add function to update instances with unofficial github repo
 

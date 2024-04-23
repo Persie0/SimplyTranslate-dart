@@ -304,12 +304,15 @@ class SimplyTranslator {
   }
 
   /// Sets base URL to other instances:
-  ///https:///simple-web.org/projects/simplytranslate.html
   set setSimplyInstance(String url) => _baseUrlSimply = url;
+
+  /// Sets base URL to other instances:
   set setLingvaInstance(String url) => _baseUrlLingva = url;
 
   ///get the instances
   get getSimplyInstances => simplyInstances;
+
+  ///get the instances
   get getLingvaInstances => lingvaInstances;
 
   ///get the currently used instance
@@ -625,6 +628,7 @@ class SimplyTranslator {
     return frequencyTranslations.toSet().toList();
   }
 
+  ///test the speed of the translation
   Future<String> speedTest(Function function,
       [String? sourceText, String? from, String? to]) async {
     sourceText = sourceText ?? "Hallo";
@@ -646,27 +650,25 @@ List<String> lingvaInstances = ["translate.plausibility.cloud", "lingva.ml"];
 
 ///Translation engines
 enum EngineType {
+  /// googletranslate
   google,
 
-  /// googletranslate
-  libre,
-
   /// libretranslate
-}
-
-enum Site {
-  lingva,
-  simplytranslate,
-}
-
-///mode
-enum Mode {
-  /// TTS of word
-  tts,
-
-  /// text translation
-  text,
+  libre,
 }
 
 ///behaviour of what Instance should be used with the next translation
-enum InstanceMode { Random, Loop, Same, Lazy }
+/// Defines the behavior of instance selection for translation requests.
+enum InstanceMode {
+  /// Selects an instance randomly for each translation request.
+  Random,
+
+  /// Iterates through the instances in a loop for each translation request.
+  Loop,
+
+  /// Uses the same instance for all translation requests.
+  Same,
+
+  /// Delays the translation request by 2 seconds before proceeding.
+  Lazy
+}

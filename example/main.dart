@@ -4,7 +4,6 @@ void main() async {
   ///if you do not specify the source language it is automatically selecting it depending on the text
   ///if you do not specify the target language it is automatically English
 
-
   //////////////////////////////////
   // SimplyTranslate (=Google Translate)
   // pretty much all functions are the same for Lingva Translate
@@ -26,7 +25,7 @@ void main() async {
   ///check if instance is working
   print(await st.isSimplyInstanceWorking("simplytranslate.pussthecat.org"));
   //true
-  
+
   ///short form to only get translated text as String, also shorter code:
   String textResult = await st.trSimply("Er läuft schnell.", "de", 'en');
   print(textResult);

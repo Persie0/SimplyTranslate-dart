@@ -1,6 +1,7 @@
 part of '../translator.dart';
 
 ///Result includes the different translation results
+/// (translated text, definitions, translations, frequencyTranslations, types)
 class Result {
   const Result(
       this.text,
@@ -20,6 +21,7 @@ class Result {
 }
 
 /// raw_translations as a class
+/// (type, words, frequency, meaning)
 class Translations {
   Translations(this.type, this.word, this.frequency, this.meaning);
   final String type;
@@ -29,6 +31,7 @@ class Translations {
 }
 
 /// raw_definitions as a class
+/// (type, definition, synonyms, informalSynonyms, useInSentence, archaic, dictionary)
 class Definitions {
   Definitions(this.type, this.definition, this.synonyms, this.informalSynonyms,
       this.useInSentence, this.archaic, this.dictionary);
@@ -42,6 +45,7 @@ class Definitions {
 }
 
 /// Translation returned from SimplyTranslator.translate method
+/// (translations, source Text, sourceLanguage, targetLanguage)
 abstract class Translation {
   final Result translations;
   late final String source;
@@ -52,6 +56,7 @@ abstract class Translation {
       this.translations, this.source, this.sourceLanguage, this.targetLanguage);
 }
 
+/// Translation returned from SimplyTranslator.translate method
 class _Translation extends Translation {
   final Result translations;
   final String source;
