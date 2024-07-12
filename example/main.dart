@@ -14,13 +14,13 @@ void main() async {
   ///change instance (defaut is simplytranslate.org)
   st.setSimplyInstance = "simplytranslate.pussthecat.org";
 
-  /// get the list with instances
+  /// update the list with working instances  via
+  print(await st.fetchInstances());
+  //true
+
+  /// get the list with simply instances
   print(st.getSimplyInstances);
   //[simplytranslate.org, st.tokhmi.xyz, translate.josias.dev, ...
-
-  /// unofficially update the list with instances (also not always up to date)
-  print(await st.fetchSimplyInstances());
-  //true
 
   ///check if instance is working
   print(await st.isSimplyInstanceWorking("simplytranslate.pussthecat.org"));

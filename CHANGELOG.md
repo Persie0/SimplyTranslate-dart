@@ -1,5 +1,11 @@
 # Releases
 
+# 2.1.0
+- updated fetchInstances(), now only returns working instances
+- updated readme
+- updated example
+
+
 # 2.0.2
 - improved documentation, removed unnecessary code
 

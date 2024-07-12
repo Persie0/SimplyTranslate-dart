@@ -363,10 +363,9 @@ class SimplyTranslator {
     }
   }*/
 
-  ///fetch the instances from (own) API, not always up to date
-  Future<bool> fetchLingvaInstances() async {
-    final url =
-        "https://raw.githubusercontent.com/Persie0/Persie0.github.io/main/pareader/simply.json";
+  ///fetch working Lingva and Simply instances from the API (not always up to date)
+  Future<bool> fetchInstances() async {
+    final url = "https://simplytranslate-api-tester.vercel.app/getWorkingInstances";
 
     try {
       final response = await http.get(Uri.parse(url));
@@ -375,40 +374,10 @@ class SimplyTranslator {
         // If the server returns a 200 OK response, parse the JSON data here
         final jsonData = jsonDecode(response.body);
 
-        lingvaInstances = jsonData["list"].cast<String>();
-        //remove https:// and / at the end
-        for (int i = 0; i < lingvaInstances.length; i++) {
-          lingvaInstances[i] = lingvaInstances[i].replaceAll("https://", "");
-          if (lingvaInstances[i].endsWith("/")) {
-            lingvaInstances[i] =
-                lingvaInstances[i].substring(0, lingvaInstances[i].length - 1);
-          }
-        }
-        return true;
-      } else {
-        // If the server did not return a 200 OK response, handle the error here
-        print("Failed to fetch data. Status code: ${response.statusCode}");
-      }
-    } catch (e) {
-      // Handle any exceptions that occur during the HTTP request
-      print("Error: $e");
-    }
-    return false;
-  }
+        simplyInstances = jsonData["workingInstance"]["simply"].cast<String>();
+        lingvaInstances = jsonData["workingInstance"]["lingva"].cast<String>();
 
-  ///fetch the instances from the (own) API, not always up to date
-  Future<bool> fetchSimplyInstances() async {
-    final url =
-        "https://raw.githubusercontent.com/Persie0/Persie0.github.io/main/pareader/simply.json";
-
-    try {
-      final response = await http.get(Uri.parse(url));
-
-      if (response.statusCode == 200) {
-        // If the server returns a 200 OK response, parse the JSON data here
-        final jsonData = jsonDecode(response.body);
-
-        simplyInstances = jsonData["list"].cast<String>();
+        //remove https:// and / at the end for simplyInstances
         for (int i = 0; i < simplyInstances.length; i++) {
           simplyInstances[i] = simplyInstances[i].replaceAll("https://", "");
           if (simplyInstances[i].endsWith("/")) {
@@ -416,6 +385,16 @@ class SimplyTranslator {
                 simplyInstances[i].substring(0, simplyInstances[i].length - 1);
           }
         }
+
+        //remove https:// and / at the end for lingvaInstances
+        for (int i = 0; i < lingvaInstances.length; i++) {
+          lingvaInstances[i] = lingvaInstances[i].replaceAll("https://", "");
+          if (lingvaInstances[i].endsWith("/")) {
+            lingvaInstances[i] =
+                lingvaInstances[i].substring(0, lingvaInstances[i].length - 1);
+          }
+        }
+
         return true;
       } else {
         // If the server did not return a 200 OK response, handle the error here
