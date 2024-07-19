@@ -13,11 +13,16 @@ TTS is also supported.
 ## Not working? 
 
 As I can't always update the instance list (instances are run by volunteers and can be turned off at any time), do one of the following:
-- fetch the working instances via `fetchInstances` (look at example code, corresponding project is [here](https://github.com/Persie0/simplytranslate_api_tester))
+- fetch the working instances via `fetchInstances` (look at example code, corresponding project is [here](https://github.com/Persie0/Simplytranslate-Endpoint-Tester))
 - Search for new instances by googling "simplytranslate" or "lingva translate" and set the instance with setInstance = "instance"
 - lingva instances can also be found [here](https://github.com/thedaviddelta/lingva-translate?tab=readme-ov-file#instances)
 
-## Import
+## Adding the package to your project
+To add this package to your project, add the following line to your `pubspec.yaml` file under `dependencies`:
+```yaml
+simplytranslate: ^2.2.0
+```
+then import the package in your Dart file:
 ```dart
 import 'package:simplytranslate/simplytranslate.dart';
 ```

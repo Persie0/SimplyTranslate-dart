@@ -1,5 +1,13 @@
 # Releases
 
+# 2.2.0
+- updated http dependency
+- added parameter to set a custom remote to get working instances
+- fixed translation of special characters (e.g. ÄÖÜ) with some instances
+- isLingvaInstanceWorking() added
+- fixed isSimplyInstanceWorking()
+- (dev) added tests
+
 # 2.1.0
 - updated fetchInstances(), now only returns working instances
 - updated readme

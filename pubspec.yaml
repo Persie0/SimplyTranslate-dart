@@ -1,14 +1,15 @@
 name: simplytranslate
-version: 2.1.0
+version: 2.2.0
 description: Free and unlimited Google translations and TTS. Fast and private.
 #author: Marvin Perzi
 homepage: https://github.com/Persie0/SimplyTranslate-dart
 dependencies:
-  http: ^1.2.1
+  http: ^1.2.2
 
 dev_dependencies:
   lints: ^4.0.0
   test: any
+  matcher: ^0.12.16+1
 
 environment:
   sdk: '>=2.15.0 <4.0.0'

@@ -81,7 +81,9 @@ class SimplyTranslator {
         continue;
       }
 
-      jsonData = jsonDecode(data.body);
+      // Decode the response body using UTF-8 to properly handle special characters
+      String decodedBody = utf8.decode(data.bodyBytes);
+      jsonData = jsonDecode(decodedBody);
       if (jsonData == null) {
         nextSimplyInstance();
         exeption = http.ClientException('Error: Can\'t parse json data');
@@ -224,7 +226,9 @@ class SimplyTranslator {
           'Error ${data.statusCode}:\n\n ${data.body}', url);
     }
 
-    jsonData = jsonDecode(data.body);
+    // Decode the response body using UTF-8 to properly handle special characters
+    String decodedBody = utf8.decode(data.bodyBytes);
+    jsonData = jsonDecode(decodedBody);
     if (jsonData == null) {
       throw http.ClientException('Error: Can\'t parse json data');
     }
@@ -252,9 +256,9 @@ class SimplyTranslator {
       throw http.ClientException('Error ${data.statusCode}: ${data.body}', url);
     }
 
-    var jsonData = jsonDecode(
-      utf8.decode(data.body.runes.toList()),
-    );
+    // Decode the response body using UTF-8 to properly handle special characters
+    String decodedBody = utf8.decode(data.bodyBytes);
+    var jsonData = jsonDecode(decodedBody);
     if (jsonData == null) {
       throw http.ClientException('Error: Can\'t parse json data');
     }
@@ -293,7 +297,9 @@ class SimplyTranslator {
           'Error ${data.statusCode}:\n\n ${data.body}', url);
     }
 
-    jsonData = jsonDecode(data.body);
+    // Decode the response body using UTF-8 to properly handle special characters
+    String decodedBody = utf8.decode(data.bodyBytes);
+    jsonData = jsonDecode(decodedBody);
     if (jsonData == null) {
       throw http.ClientException('Error: Can\'t parse json data');
     }
@@ -319,7 +325,7 @@ class SimplyTranslator {
   get getCurrentSimplyInstance => _baseUrlSimply;
   get getCurrentLingvaInstance => _baseUrlLingva;
 
-  ///check if the passed instance is working
+  ///check if the passed simply instance is working
   Future<bool> isSimplyInstanceWorking(String urlValue) async {
     Uri url;
     try {
@@ -329,8 +335,8 @@ class SimplyTranslator {
       return false;
     }
     try {
-      final response = await http
-          .get(Uri.parse('$url/api/translate?from=en&to=es&text=hello'));
+      final response = await http.get(Uri.parse(
+          '$url/api/translate?from=en&to=es&text=hello&engine=google'));
       if (response.statusCode == 200) {
         return true;
       } else {
@@ -342,37 +348,39 @@ class SimplyTranslator {
     }
   }
 
-/*  ///update the instances with the API
-  Future<bool> updateSimplyInstances(
-      {List<String> blacklist = const ["tl.vern.cc"]}) async {
+  /// check if the passed lingva instance is working
+  Future<bool> isLingvaInstanceWorking(String urlValue) async {
+    Uri? url;
     try {
-      final response = await http
-          .get(Uri.parse('https://simple-web.org/instances/simplytranslate'));
-      List<String> newInstances = [];
-      response.body
-          .trim()
-          .split('\n')
-          .forEach((element) => newInstances.add(element));
-      for (var element in blacklist) {
-        newInstances.remove(element);
-      }
-      simplyInstances = newInstances;
-      return true;
-    } catch (error) {
+      url = Uri.parse("https://$urlValue");
+    } catch (err) {
+      print(err);
       return false;
     }
-  }*/
+    try {
+      final response = await http.get(Uri.parse('$url/api/v1/en/en/hello'));
+      return response.statusCode == 200;
+    } catch (err) {
+      print(err);
+      return false;
+    }
+  }
 
   ///fetch working Lingva and Simply instances from the API (not always up to date)
-  Future<bool> fetchInstances() async {
-    final url = "https://simplytranslate-api-tester.vercel.app/getWorkingInstances";
+  /// Fetches working instances from an API endpoint.
+  /// The API response format can be seen at: https://simplytranslate-api-tester.vercel.app/getWorkingInstances
+  /// The project for this API is available at: https://github.com/Persie0/Simplytranslate-Endpoint-Tester
+  Future<bool> fetchInstances({String? remoteUrl}) async {
+    final url = remoteUrl ??
+        "https://simplytranslate-api-tester.vercel.app/getWorkingInstances";
 
     try {
       final response = await http.get(Uri.parse(url));
 
       if (response.statusCode == 200) {
-        // If the server returns a 200 OK response, parse the JSON data here
-        final jsonData = jsonDecode(response.body);
+        // Decode the response body using UTF-8 to properly handle special characters
+        String decodedBody = utf8.decode(response.bodyBytes);
+        final jsonData = jsonDecode(decodedBody);
 
         simplyInstances = jsonData["workingInstance"]["simply"].cast<String>();
         lingvaInstances = jsonData["workingInstance"]["lingva"].cast<String>();
