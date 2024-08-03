@@ -10,6 +10,9 @@ void main() async {
   //////////////////////////////////
   final st = SimplyTranslator(EngineType.google);
 
+  st.printLanguages();
+  //auto: Automatic, af: Afrikaans, sq: Albanian, ...
+
   /// find other instances under https://simple-web.org/projects/simplytranslate.html
   ///change instance (defaut is simplytranslate.org)
   st.setSimplyInstance = "simplytranslate.pussthecat.org";

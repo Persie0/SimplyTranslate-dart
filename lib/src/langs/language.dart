@@ -135,6 +135,12 @@ class LanguageList {
     }
     return false;
   }
+
+  void printLanguages() {
+    _langs.forEach((code, name) {
+      print('$code: $name');
+    });
+  }
 }
 
 class LanguageNotSupportedException implements Exception {

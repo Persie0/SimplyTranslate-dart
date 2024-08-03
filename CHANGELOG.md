@@ -1,5 +1,8 @@
 # Releases
 
+# 2.2.1
+- added method to get languages and their codes
+
 # 2.2.0
 - updated http dependency
 - added parameter to set a custom remote to get working instances

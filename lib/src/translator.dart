@@ -625,6 +625,11 @@ class SimplyTranslator {
     await function(sourceText, from, to);
     return stopwatch.elapsed.inMilliseconds.toString() + "ms";
   }
+
+  ///print all languages and their codes
+  void printLanguages() {
+    _languageList.printLanguages();
+  }
 }
 
 ///list with instances
@@ -659,3 +664,4 @@ enum InstanceMode {
   /// Delays the translation request by 2 seconds before proceeding.
   Lazy
 }
+
