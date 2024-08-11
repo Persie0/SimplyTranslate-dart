@@ -1,5 +1,8 @@
 # Releases
 
+# 2.2.1+2
+- upddate example code
+
 # 2.2.1
 - added method to get languages and their codes
 

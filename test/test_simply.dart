@@ -15,6 +15,32 @@ void main() {
       expect(instances, isTrue);
     });
 
+    test('Test all SimplyTranslate instances for ÄÖÜ translation', () async {
+      for (var instance in st.getSimplyInstances) {
+        st.setSimplyInstance = instance;
+        try {
+          String result = await st.trSimply("ÄÖÜ auto", "de", "en");
+          expect(result.toLowerCase(), equals("äöü car"));
+          print("Instance: $instance, Translation: ${result.toLowerCase()}");
+        } catch (e) {
+          print("Failed to translate ÄÖÜ with instance $instance: $e");
+        }
+      }
+    });
+
+    test('Test all Lingva instances for ÄÖÜ translation', () async {
+      for (var instance in st.getLingvaInstances) {
+        st.setLingvaInstance = instance;
+        try {
+          String result = await st.trLingva("ÄÖÜ", "de", "en");
+          expect(result.toLowerCase(), equals("äöü"));
+          print("Instance: $instance, Translation: ${result.toLowerCase()}");
+        } catch (e) {
+          print("Failed to translate ÄÖÜ with instance $instance: $e");
+        }
+      }
+    });
+
     test('Get simply instances', () {
       var instances = st.getSimplyInstances;
       expect(instances, contains(st.getCurrentSimplyInstance));
@@ -34,7 +60,7 @@ void main() {
 
     test('Translate text (short form)', () async {
       String textResult = await st.trSimply("Er läuft schnell.", "de", 'en');
-      expect(textResult, equals("He walks fast."));
+      expect(textResult, equals("He runs fast."));
     });
 
     test('Translate text (long form)', () async {

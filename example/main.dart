@@ -25,39 +25,6 @@ void main() async {
   print(st.getSimplyInstances);
   //[simplytranslate.org, st.tokhmi.xyz, translate.josias.dev, ...
 
-  /// Test all instances for correct translation of ÄÖÜ
-  print("Testing all SimplyTranslate instances for ÄÖÜ translation:");
-  for (var instance in st.getSimplyInstances) {
-    st.setSimplyInstance = instance;
-    try {
-      String result = await st.trSimply("ÄÖÜ auto", "de", "en");
-      print("$instance: $result");
-      if (result.toLowerCase() == "äöü car") {
-        print("  ✓ Translated correctly");
-      } else {
-        print("  ✗ Incorrect translation");
-      }
-    } catch (e) {
-      print("$instance: Error - $e");
-    }
-  }
-
-  print("\nTesting all Lingva instances for ÄÖÜ translation:");
-  for (var instance in st.getLingvaInstances) {
-    st.setLingvaInstance = instance;
-    try {
-      String result = await st.trLingva("ÄÖÜ", "de", "en");
-      print("$instance: $result");
-      if (result.toLowerCase() == "äöü") {
-        print("  ✓ Translated correctly");
-      } else {
-        print("  ✗ Incorrect translation");
-      }
-    } catch (e) {
-      print("$instance: Error - $e");
-    }
-  }
-
   ///check if instance is working
   print(await st.isSimplyInstanceWorking("simplytranslate.pussthecat.org"));
   //true

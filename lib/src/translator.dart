@@ -664,4 +664,3 @@ enum InstanceMode {
   /// Delays the translation request by 2 seconds before proceeding.
   Lazy
 }
-
