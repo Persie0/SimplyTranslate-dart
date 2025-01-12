@@ -1,5 +1,10 @@
 # Releases
 
+# 2.2.2
+- due to excessive usage and misuse, the public instance is now removed
+- you have to set a custom remote url to get working instances now
+- checkout https://github.com/Persie0/Simplytranslate-Endpoint-Tester for more information
+
 # 2.2.1+3
 - updated example code
 

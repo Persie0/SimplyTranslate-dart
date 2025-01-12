@@ -368,14 +368,12 @@ class SimplyTranslator {
 
   ///fetch working Lingva and Simply instances from the API (not always up to date)
   /// Fetches working instances from an API endpoint.
-  /// The API response format can be seen at: https://simplytranslate-api-tester.vercel.app/getWorkingInstances
   /// The project for this API is available at: https://github.com/Persie0/Simplytranslate-Endpoint-Tester
-  Future<bool> fetchInstances({String? remoteUrl}) async {
-    final url = remoteUrl ??
-        "https://simplytranslate-api-tester.vercel.app/getWorkingInstances";
-
+  ///
+  /// [remoteUrl] The URL of the API endpoint to fetch instances from. e.g. https://simplytranslate-api-tester.vercel.app
+  Future<bool> fetchInstances(String remoteUrl) async {
     try {
-      final response = await http.get(Uri.parse(url));
+      final response = await http.get(Uri.parse(remoteUrl));
 
       if (response.statusCode == 200) {
         // Decode the response body using UTF-8 to properly handle special characters

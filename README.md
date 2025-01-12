@@ -20,7 +20,7 @@ As I can't always update the instance list (instances are run by volunteers and 
 ## Adding the package to your project
 To add this package to your project, add the following line to your `pubspec.yaml` file under `dependencies`:
 ```yaml
-simplytranslate: ^2.2.0
+simplytranslate: ^2.2.2
 ```
 then import the package in your Dart file:
 ```dart
@@ -31,7 +31,7 @@ import 'package:simplytranslate/simplytranslate.dart';
 [Example code](https://pub.dev/packages/simplytranslate/example)
 
 ## Limitations
-- Max char length per request for Japanese, Chinese, and Korean is around 1250. For other languages, it's around 5000 due to different encoding results.
+- Max character length per request for Japanese, Chinese, and Korean is around 1250. For other languages, it's around 5000 due to different encoding results.
 
 ## Apps using SimplyTranslate
 - [Pareader](https://play.google.com/store/apps/details?id=at.austriao.pareader) - Learn languages with news articles in multiple languages and translate words with a simple tap.

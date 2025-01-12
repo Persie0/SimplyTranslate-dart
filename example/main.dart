@@ -17,8 +17,9 @@ void main() async {
   ///change instance (defaut is simplytranslate.org)
   st.setSimplyInstance = "simplytranslate.pussthecat.org";
 
-  /// update the list with working instances  via
-  print(await st.fetchInstances());
+  /// update the list with working instances 
+  /// checkout https://github.com/Persie0/Simplytranslate-Endpoint-Tester for more information
+  print(await st.fetchInstances("https://yourinstance.vercel.app"));
   //true
 
   /// get the list with simply instances
